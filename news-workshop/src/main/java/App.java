@@ -1,30 +1,34 @@
-import com.aylien.textapi.TextAPIClient;
-import com.aylien.textapi.parameters.*;
-import com.aylien.textapi.responses.*;
+import com.aylien.textapi.responses.Category;
+import com.aylien.textapi.responses.Classifications;
+import com.aylien.textapi.responses.TaxonomyCategory;
+import com.aylien.textapi.responses.TaxonomyClassifications;
 import java.net.URL;
+import static java.lang.System.out;
 
 public class App {
 
     public static void main(String[] args) throws Exception {
+        TextAnalyser analyser = new TextAnalyser();
+        URL testUrl = new URL("http://techcrunch.com/2015/07/16/microsoft-will-never-give-up-on-mobile");
 
-        TextAPIClient client = new TextAPIClient("b5c4e688", "5d5fb206e2803c3a7e117f596c0fbe79");
-        URL url = new URL("http://www.bbc.com/news/science-environment-30097648");
+        Classifications classifications = analyser.ClassifyUrl(testUrl);
+        out.println("URL text:");
+        String text = classifications.getText();
+        out.println(text);
 
-        ConceptsParams.Builder builder = ConceptsParams.newBuilder();
-        builder.setUrl(url);
-        Concepts concepts = client.concepts(builder.build());
-        System.out.println(concepts.getText());
-        for (Concept c: concepts.getConcepts()) {
-            System.out.print(c.getUri() + ": ");
-            for (SurfaceForm sf: c.getSurfaceForms()) {
-                System.out.print(sf.getString() + " ");
-            }
-            System.out.println();
+        out.println("URL Categories:");
+        for (Category category: classifications.getCategories()) {
+            System.out.println(category);
         }
 
-        LanguageParams languageParams = new LanguageParams(null, url);
-        Language language = client.language(languageParams);
-        System.out.printf("\nLanguage is: %s (%f)\n", language.getLanguage(), language.getConfidence());
-    }
+        TaxonomyClassifications response = analyser.ClassifyUrlByTaxonomy(testUrl);
 
+        out.println("URL Taxonomy:");
+        out.println(response.getTaxonomy());
+
+        out.println("URL Taxonomy Categories:");
+        for (TaxonomyCategory c: response.getCategories()) {
+            out.println(c);
+        }
+    }
 }
