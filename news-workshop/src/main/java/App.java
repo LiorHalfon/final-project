@@ -28,7 +28,7 @@ public class App {
         haveToAppear.add("IAB19");
         cantAppear.add("IAB1-6");
 
-        ResultsFilter resultsFilter = new ResultsFilter(analyser, haveToAppear, cantAppear);
+        ResultsFilter resultsFilter = new ResultsFilter(haveToAppear, cantAppear);
         if (results != null) {
             out.println("Results for: " + APPLE);
             BingWebResponseData<BingNewsResult> data = results.getData();
@@ -37,7 +37,7 @@ public class App {
                 URL url = new URL(resultItem.getUrl());
 
                 TaxonomyClassifications taxonomyClassifications = analyser.ClassifyUrlByTaxonomy(url);
-                if(!resultsFilter.isURLRelevant(taxonomyClassifications)){
+                if(!resultsFilter.isUrlRelevant(taxonomyClassifications)){
                     out.println("Got an irrelevant url");
                     continue;
                 }

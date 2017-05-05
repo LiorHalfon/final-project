@@ -7,17 +7,15 @@ public class ResultsFilter {
 
     private final ArrayList<String> haveToAppearCategories;
     private final ArrayList<String> cantAppearCategories;
-    private final TextAnalyser analyser;
 
     // haveToAppearCategories and cantAppearCategories are lists of IAB Categories
-    public ResultsFilter(TextAnalyser analyser, ArrayList<String> haveToAppearCategories,
+    public ResultsFilter(ArrayList<String> haveToAppearCategories,
                          ArrayList<String> cantAppearCategories) {
-        this.analyser = analyser;
         this.haveToAppearCategories = haveToAppearCategories == null ? new ArrayList<>() :haveToAppearCategories;
         this.cantAppearCategories = cantAppearCategories == null ? new ArrayList<>() :cantAppearCategories;
     }
 
-    public boolean isURLRelevant(TaxonomyClassifications taxonomyClassifications)
+    public boolean isUrlRelevant(TaxonomyClassifications taxonomyClassifications)
     {
         ArrayList categoriesLeftToAppear = (ArrayList)haveToAppearCategories.clone();
 
