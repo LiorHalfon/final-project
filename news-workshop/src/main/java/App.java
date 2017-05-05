@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.System.out;
@@ -21,25 +22,30 @@ public class App {
         BingController bingController = ctx.getBean(BingController.class);
 
         BingNewsResponse results = bingController.searchNews(APPLE);
+
+        ArrayList<String> haveToAppear = new ArrayList<>();
+        ArrayList<String> cantAppear = new ArrayList<>();
+        haveToAppear.add("IAB19");
+        cantAppear.add("IAB1-6");
+
+        ResultsFilter resultsFilter = new ResultsFilter(analyser, haveToAppear, cantAppear);
         if (results != null) {
             out.println("Results for: " + APPLE);
             BingWebResponseData<BingNewsResult> data = results.getData();
             List<BingNewsResult> resultsList = data.getResults();
             for (BingNewsResult resultItem : resultsList) {
                 URL url = new URL(resultItem.getUrl());
-                Classifications classifications = analyser.ClassifyUrl(url);
-                out.println("URL text:");
-                String text = classifications.getText();
-                out.println(text);
-                out.println();
-
-                out.println("URL Categories:");
-                for (Category category: classifications.getCategories()) {
-                    System.out.println(category);
-                }
-                out.println();
 
                 TaxonomyClassifications taxonomyClassifications = analyser.ClassifyUrlByTaxonomy(url);
+                if(!resultsFilter.isURLRelevant(taxonomyClassifications)){
+                    out.println("Got an irrelevant url");
+                    continue;
+                }
+
+                out.println("URL text:");
+                String text = taxonomyClassifications.getText();
+                out.println(text);
+                out.println();
 
                 out.println("URL Taxonomy:");
                 out.println(taxonomyClassifications.getTaxonomy());
