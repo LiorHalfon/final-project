@@ -3,13 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
     <servlet>
-        <servlet-name>HelloWorld</servlet-name>
-        <servlet-class>HelloWorld</servlet-class>
+        <servlet-name>javaAngularJS</servlet-name>
+        <servlet-class>com.controller.AngularJsServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
-        <servlet-name>HelloWorld</servlet-name>
-        <url-pattern>/HelloWorld</url-pattern>
+        <servlet-name>javaAngularJS</servlet-name>
+        <url-pattern>/javaAngularJS</url-pattern>
     </servlet-mapping>
 </web-app>
