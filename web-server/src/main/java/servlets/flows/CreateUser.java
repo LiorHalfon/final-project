@@ -1,0 +1,32 @@
+package servlets.flows;
+
+import db.api.UserManager;
+import model.User;
+import servlets.utils.ServletUtils;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebServlet(name = "CreateUser", urlPatterns = {"/createUser"})
+public class CreateUser extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        UserManager userMgr = ServletUtils.GetNewsWorkshopUtils(getServletContext()).userManager;
+
+        //TODO: pull data from request
+        User user = new User();
+        user.setEmail("servlet@email.com");
+        user.setFirstName("servlet-fname");
+        user.setLastName("servlet-lname");
+
+        userMgr.createUser(user);
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request,response);
+    }
+}
