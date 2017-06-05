@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,13 +8,7 @@
       var app = angular.module('myApp', []);
       app.controller("myCtrl",function($scope, $http) {
           $scope.getDataFromServer = function() {
-              $http({
-                  method : 'GET',
-                  url : 'javaAngularJS'
-              }).then(function mySuccess(response) {
-                  $scope.person = response.data;
-              }, function myError(response) {
-              });
+
           };
       });
   </script>
@@ -23,9 +16,7 @@
 <body>
 <div ng-app="myApp">
   <div ng-controller="myCtrl">
-    <button ng-click="getDataFromServer()">Fetch data from server</button>
-    <p>First Name : {{person.firstName}}</p>
-    <p>Last Name : {{person.lastName}}</p>
+    Hello
   </div>
 </div>
 </body>
