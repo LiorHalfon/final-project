@@ -15,8 +15,8 @@ import java.io.IOException;
 
 @WebServlet(name = "CreateUser", urlPatterns = {"/createUser"})
 public class CreateUser extends HttpServlet {
-    private static final String FIRST_NAME = "firstName";
-    private static final String LAST_NAME = "lastName";
+    private static final String FIRST_NAME = "firstname";
+    private static final String LAST_NAME = "lastname";
     private static final String EMAIL = "email";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
