@@ -32,6 +32,7 @@
     <ul ng-model="currentView">
         <li><button ng-click="currentView = 'CreateUser'">Create User</button></li>
         <li><button ng-click="currentView = 'StartQuery'">Start Query</button></li>
+        <li><button ng-click="currentView = 'SendFeedback'">Send Feedback</button></li>
     </ul>
     <div ng-show="currentView === 'CreateUser'">
     <h1>Create User</h1>
@@ -62,6 +63,22 @@
             Black List Domains:<br>
             <input type="text" name="blackListDomains" value="ft.com">
             <br>
+            <br>
+            <input type="submit" />
+        </form>
+    </div>
+
+    <div ng-show="currentView === 'SendFeedback'">
+        <h1>Start Query</h1>
+        <form action="/sendUserFeedback" method="get">
+            URL:<br>
+            <input type="url" name="feedbackurl" value=""/><br>
+            Feedback:<br>
+            <select name="feedback">
+                <option value="0">BLOCK DOMAIN</option>
+                <option value="1">THUMBS UP</option>
+                <option value="2">THUMBS DOWN</option>
+            </select>
             <br>
             <input type="submit" />
         </form>

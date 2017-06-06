@@ -17,14 +17,19 @@ import java.io.IOException;
 
 @WebServlet(name = "SendUserFeedback", urlPatterns = {"/sendUserFeedback"})
 public class SendUserFeedback extends HttpServlet {
+    private static final String FEEDBACK_URL = "feedbackurl";
+    private static final String FEEDBACK= "feedback";
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         NewsWorkshopUtils newsWorkshopUtils = ServletUtils.GetNewsWorkshopUtils(getServletContext());
         UserFeedbackManager userfeedbackMgr = newsWorkshopUtils.userFeedbackManager;
         UserManager userMgr = newsWorkshopUtils.userManager;
 
         User user = userMgr.findUserById(SessionUtils.getUserId(request));
+        String feedbackUrl = request.getParameter(FEEDBACK_URL);
+        int feedback = Integer.parseInt(request.getParameter(FEEDBACK));
 
-        userfeedbackMgr.sendUserFeedback(user, UserFeedback.ActivityType.BLOCK_DOMAIN);
+        userfeedbackMgr.sendUserFeedback(user, UserFeedback.ActivityType.values()[feedback]);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
