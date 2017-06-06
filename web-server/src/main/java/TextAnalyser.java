@@ -3,8 +3,10 @@ import com.aylien.textapi.TextAPIException;
 import com.aylien.textapi.parameters.ClassifyByTaxonomyParams;
 import com.aylien.textapi.parameters.ClassifyParams;
 import com.aylien.textapi.parameters.SentimentParams;
+import com.aylien.textapi.parameters.SummarizeParams;
 import com.aylien.textapi.responses.Classifications;
 import com.aylien.textapi.responses.Sentiment;
+import com.aylien.textapi.responses.Summarize;
 import com.aylien.textapi.responses.TaxonomyClassifications;
 
 import java.net.URL;
@@ -42,5 +44,12 @@ public class TextAnalyser {
             builder.setMode("document");
 
         return _client.sentiment(builder.build());
+    }
+
+    public Summarize Summarize(URL url) throws TextAPIException {
+        SummarizeParams.Builder builder = SummarizeParams.newBuilder();
+        builder.setUrl(url);
+        builder.setNumberOfSentences(5);
+        return  _client.summarize(builder.build());
     }
 }

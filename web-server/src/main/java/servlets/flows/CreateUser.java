@@ -19,9 +19,6 @@ public class CreateUser extends HttpServlet {
 
         //TODO: pull data from request
         User user = new User();
-        user.setEmail("servlet@email.com");
-        user.setFirstName("servlet-fname");
-        user.setLastName("servlet-lname");
 
         userMgr.createUser(user);
     }
