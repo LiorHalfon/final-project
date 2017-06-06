@@ -1,6 +1,7 @@
 package servlets.flows;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import db.api.UserManager;
 import model.User;
 import search.NewsFinder;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,13 +35,15 @@ public class StartSearch extends HttpServlet {
         NewsFinder newsFinder = newsWorkshop.newsFinder;
         UserManager userMgr = newsWorkshop.userManager;
 
-        String haveToAppearString = request.getParameter(HaveToAppear);
-        //TODO: how to parse the array parameters?
         User user = userMgr.findUserById(SessionUtils.getUserId(request));
-        ArrayList<String> haveToAppear = new ArrayList<>();
-        ArrayList<String> cantAppear = new ArrayList<>();
-        ArrayList<String> blacklistDomains = new ArrayList<>();
-        ArrayList<String> queries = new ArrayList<>();
+
+        Gson gson = new Gson();
+        Type stringListType = new TypeToken<List<String>>(){}.getType();
+
+        ArrayList<String> haveToAppear = gson.fromJson(request.getParameter(HaveToAppear), stringListType);
+        ArrayList<String> cantAppear = gson.fromJson(request.getParameter(CantAppear), stringListType);
+        ArrayList<String> blacklistDomains = gson.fromJson(request.getParameter(Queries), stringListType);
+        ArrayList<String> queries = gson.fromJson(request.getParameter(BlackListDomains), stringListType);
 
         newsFinder.Init(haveToAppear,cantAppear,blacklistDomains,queries,user);
         try
