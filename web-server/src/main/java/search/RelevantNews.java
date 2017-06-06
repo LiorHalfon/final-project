@@ -1,3 +1,5 @@
+package search;
+
 import com.aylien.textapi.responses.Sentiment;
 import com.aylien.textapi.responses.Summarize;
 import com.aylien.textapi.responses.TaxonomyClassifications;

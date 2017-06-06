@@ -1,3 +1,5 @@
+package search;
+
 import com.aylien.textapi.TextAPIClient;
 import com.aylien.textapi.TextAPIException;
 import com.aylien.textapi.parameters.ClassifyByTaxonomyParams;

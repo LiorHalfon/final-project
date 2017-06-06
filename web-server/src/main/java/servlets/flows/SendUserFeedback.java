@@ -6,6 +6,7 @@ import model.User;
 import model.UserFeedback;
 import servlets.utils.NewsWorkshopUtils;
 import servlets.utils.ServletUtils;
+import servlets.utils.SessionUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,8 +22,7 @@ public class SendUserFeedback extends HttpServlet {
         UserFeedbackManager userfeedbackMgr = newsWorkshopUtils.userFeedbackManager;
         UserManager userMgr = newsWorkshopUtils.userManager;
 
-        //TODO: extract user id/email from request
-        User user = userMgr.findUserById("1");
+        User user = userMgr.findUserById(SessionUtils.getUserId(request));
 
         userfeedbackMgr.sendUserFeedback(user, UserFeedback.ActivityType.BLOCK_DOMAIN);
     }

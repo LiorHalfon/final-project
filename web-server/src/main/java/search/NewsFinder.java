@@ -1,4 +1,5 @@
-import com.aylien.textapi.TextAPIException;
+package search;
+
 import model.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,5 +11,9 @@ public interface NewsFinder {
               ArrayList<String> blacklistDomains,
               ArrayList<String> queries,
               User user);
-    List<RelevantNews> Start() throws Exception;
+    void Start() throws Exception;
+
+    List<RelevantNews> GetResults();
+    Boolean IsSearchFinished();
+    String PrintResults();
 }

@@ -1,3 +1,5 @@
+package search;
+
 import com.aylien.textapi.responses.TaxonomyCategory;
 import model.User;
 import org.junit.Before;
@@ -33,32 +35,10 @@ public class NewsFinderTest {
         queries.add("apple");
 
         newsFinder.Init(haveToAppear,cantAppear,blacklistDomains,queries,user);
-        List<RelevantNews> results = newsFinder.Start();
+        newsFinder.Start();
+        List<RelevantNews> results = newsFinder.GetResults();
         assertFalse(results.isEmpty());
 
-        for (RelevantNews news: results) {
-            System.out.println();
-            System.out.println("URL:");
-            System.out.println(news.url);
-            System.out.println();
-
-            System.out.println("Classifications:");
-            for (TaxonomyCategory c: news.classifications.getCategories()) {
-                System.out.println(c.getLabel() + " " + c.getId());
-            }
-            System.out.println();
-
-            System.out.println("Summary:");
-            String[] summSentences = news.summary.getSentences();
-            for (String s: summSentences) {
-                System.out.println(s);
-            }
-            System.out.println();
-
-            System.out.println("Sentiment:");
-            System.out.println(news.sentiment.getPolarity() + ", Confidence: " +news.sentiment.getPolarityConfidence());
-            System.out.println();
-            System.out.println("---------------------------------------------------------");
-        }
+        System.out.println(newsFinder.PrintResults());
     }
 }

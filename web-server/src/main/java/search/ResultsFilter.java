@@ -1,3 +1,5 @@
+package search;
+
 import com.aylien.textapi.responses.TaxonomyCategory;
 import com.aylien.textapi.responses.TaxonomyClassifications;
 
