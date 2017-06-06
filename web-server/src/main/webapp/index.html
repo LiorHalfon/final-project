@@ -10,33 +10,78 @@
     <script>
         var app = angular.module('myApp', []);
         app.controller("myCtrl",function($scope, $http) {
-            $scope.currentView = 'CreateUser';
+            $scope.currentView = 'Login';
         });
 
-//        <!-- $(document).ready(function() {
-//            $('#startQuery')
-//                .ajaxForm({
-//                    dataType : 'json',
-//                    success : function (responseText, statusText, xhr, $form) {
-//                        alert('status: ' + statusText + '\n\nresponseText: \n' + responseText +
-//                            '\n\nThe output div should have already been updated with the responseText.');
-//                    }
-//                });
-//        });-->
+        $(document).ready(function() {
+            $('#loginform')
+                .ajaxForm({
+                    beforeSubmit:function () {
+                        $('#outputText').html('Logging in...');
+                    },
+                    success : function (response) {
+                    if(response === 'login failed')
+                    {
+                        $('#outputText').html('Failed!');
+                    }
+                    else
+                    {
+                        $('#outputText').html('Logged in!');
+                        loginSuccess(response);
+                    }
+                }});
+
+            $('#createUser')
+                .ajaxForm({success : function (response) {
+                    if(response === 'failed')
+                    {
+                        $('#outputText').html('Failed to create user!');
+                    }
+                    else{
+                        $('#outputText').html('User Created!');
+                        loginSuccess(response);
+                    }
+                }});
+
+            $('#startQuery').ajaxForm({beforeSubmit: function () {
+                $('#outputText').html('Please wait while the query is running...');
+            }});
+
+            $('button').click(function () {
+                $('#outputText').html('');
+            })
+        });
+
+        function loginSuccess(username) {
+            $('#loginmsg').html('Hello ' + username + '!');
+        }
 
 
     </script>
 </head>
 <body>
 <div ng-app="myApp" ng-controller="myCtrl">
+    <p id="loginmsg">Hello Guest!</p>
     <ul ng-model="currentView">
+        <li><button ng-click="currentView = 'Login'">Login</button></li>
         <li><button ng-click="currentView = 'CreateUser'">Create User</button></li>
         <li><button ng-click="currentView = 'StartQuery'">Start Query</button></li>
         <li><button ng-click="currentView = 'SendFeedback'">Send Feedback</button></li>
     </ul>
+
+    <div ng-show="currentView === 'Login'">
+        <h1>Login</h1>
+        <form id="loginform" method="get" action="/login">
+            Email:<br>
+            <input type="email" name="email"><br>
+            <br>
+            <input type="submit" />
+        </form>
+    </div>
+
     <div ng-show="currentView === 'CreateUser'">
     <h1>Create User</h1>
-    <form method="get" action="/createUser">
+    <form id="createUser" method="get" action="/createUser">
         First Name:<br>
         <input type="text" name="firstname" /><br>
         Last Name:<br>
@@ -69,7 +114,7 @@
     </div>
 
     <div ng-show="currentView === 'SendFeedback'">
-        <h1>Start Query</h1>
+        <h1>Send Feedback</h1>
         <form action="/sendUserFeedback" method="get">
             URL:<br>
             <input type="url" name="feedbackurl" value=""/><br>
@@ -83,6 +128,8 @@
             <input type="submit" />
         </form>
     </div>
+
+    <p id="outputText"></p>
 </div>
 </body>
 </html>
