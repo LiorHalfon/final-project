@@ -13,11 +13,12 @@ public class NewsWorkshopUtils {
     public UserManager userManager;
     public UserFeedbackManager userFeedbackManager;
     public NewsFinder newsFinder;
+    private final AnnotationConfigApplicationContext ctx;
+    private final DBController dbController;
 
     public NewsWorkshopUtils() {
-        Class<BingConfiguration> c = BingConfiguration.class;
-        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(c, DBConfiguration.class);
-        DBController dbController = ctx.getBean(DBController.class);
+        ctx = new AnnotationConfigApplicationContext(BingConfiguration.class, DBConfiguration.class);
+        dbController = ctx.getBean(DBController.class);
         userManager = dbController.getUserManager();
         userFeedbackManager = dbController.getUserFeedbackManager();
         newsFinder = new BingNewsFinder();

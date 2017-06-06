@@ -18,6 +18,7 @@ public class CreateUser extends HttpServlet {
     private static final String FIRST_NAME = "firstname";
     private static final String LAST_NAME = "lastname";
     private static final String EMAIL = "email";
+    private static final String USER_ID = "userid";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -26,7 +27,9 @@ public class CreateUser extends HttpServlet {
         String firstName = request.getParameter(FIRST_NAME);
         String lastName = request.getParameter(LAST_NAME);
         String email = request.getParameter(EMAIL);
+        String id = request.getParameter(USER_ID);
         User user = new User(firstName,lastName,email);
+        user.id = id;
 
         userMgr.createUser(user);
         HttpSession session = request.getSession(true);

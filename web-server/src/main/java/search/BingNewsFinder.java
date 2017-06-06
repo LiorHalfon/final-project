@@ -66,10 +66,10 @@ public class BingNewsFinder implements NewsFinder {
                 }
 
                 //Wait, so we won't exceed hit rate limit
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                }
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                }
             }
         }
         isSearchFinished = true;
@@ -105,6 +105,9 @@ public class BingNewsFinder implements NewsFinder {
             output += "\n";
             output += "---------------------------------------------------------\n";
         }
+
+        if(output.isEmpty())
+            output = "No relevant results found";
 
         return output;
     }

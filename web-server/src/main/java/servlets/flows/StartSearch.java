@@ -1,11 +1,8 @@
 package servlets.flows;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import db.api.UserManager;
 import model.User;
 import search.NewsFinder;
-import search.RelevantNews;
 import servlets.utils.NewsWorkshopUtils;
 import servlets.utils.ServletUtils;
 import servlets.utils.SessionUtils;
@@ -17,11 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
-@WebServlet(name = "StartSearch")
+@WebServlet(name = "StartSearch", urlPatterns = {"/startSearch"})
 public class StartSearch extends HttpServlet {
     private static final String HaveToAppear = "haveToAppear";
     private static final String CantAppear = "cantAppear";
@@ -37,32 +33,39 @@ public class StartSearch extends HttpServlet {
 
         User user = userMgr.findUserById(SessionUtils.getUserId(request));
 
-        Gson gson = new Gson();
-        Type stringListType = new TypeToken<List<String>>(){}.getType();
+        String[] data = request.getParameter(HaveToAppear).split(",");
+        ArrayList<String> haveToAppear = new ArrayList<>(Arrays.asList(data));
+        haveToAppear.remove("");
 
-        ArrayList<String> haveToAppear = gson.fromJson(request.getParameter(HaveToAppear), stringListType);
-        ArrayList<String> cantAppear = gson.fromJson(request.getParameter(CantAppear), stringListType);
-        ArrayList<String> blacklistDomains = gson.fromJson(request.getParameter(Queries), stringListType);
-        ArrayList<String> queries = gson.fromJson(request.getParameter(BlackListDomains), stringListType);
+        data = request.getParameter(CantAppear).split(",");
+        ArrayList<String> cantAppear = new ArrayList<>(Arrays.asList(data));
+        cantAppear.remove("");
+
+        data = request.getParameter(Queries).split(",");
+        ArrayList<String> queries = new ArrayList<>(Arrays.asList(data));
+        queries.remove("");
+
+        data = request.getParameter(BlackListDomains).split(",");
+        ArrayList<String> blacklistDomains = new ArrayList<>(Arrays.asList(data));
+        blacklistDomains.remove("");
 
         newsFinder.Init(haveToAppear,cantAppear,blacklistDomains,queries,user);
         try
         {
             newsFinder.Start();
-            List<RelevantNews> results = newsFinder.GetResults();
-            String json = new Gson().toJson(results);
-            response.setContentType("application/json");
-            out.write(json);
+            //List<RelevantNews> results = newsFinder.GetResults();
+            //String json = new Gson().toJson(results);
+            response.setContentType("text/plain; charset=ISO-8859-1");
+            out.write(newsFinder.PrintResults());
             response.setStatus(HttpServletResponse.SC_OK);
         }
         catch (Exception e){
             response.getWriter().write(e.toString());
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doPost(request,response);
     }
 }

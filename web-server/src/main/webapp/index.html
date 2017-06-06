@@ -5,71 +5,67 @@
     <title>News Workshop</title>
     <script type="text/javascript" src="assets/libs/angular.min.js"></script>
     <script type="text/javascript" src="assets/libs/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="assets/libs/jquery.form.js"></script>
 
     <script>
         var app = angular.module('myApp', []);
-        app.controller("formCtrl",function($scope, $http) {
-            $scope.createUser = function(user) {
-                console.log(user);
-
-                var data = $.param({
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email
-                });
-
-                var config = {
-                    headers : {
-                        'Content-Type': 'application/json'
-                    }
-                }
-
-                $http.post('/createUser', data, config)
-                    .then(
-                        function(response){
-                            console.log('success');
-                        },
-                        function(response){
-                            console.log('error');
-                        }
-                    );
-            };
-
-            $scope.getDataFromServer = function() {
-
-            };
+        app.controller("myCtrl",function($scope, $http) {
+            $scope.currentView = 'CreateUser';
         });
+
+//        <!-- $(document).ready(function() {
+//            $('#startQuery')
+//                .ajaxForm({
+//                    dataType : 'json',
+//                    success : function (responseText, statusText, xhr, $form) {
+//                        alert('status: ' + statusText + '\n\nresponseText: \n' + responseText +
+//                            '\n\nThe output div should have already been updated with the responseText.');
+//                    }
+//                });
+//        });-->
+
+
     </script>
 </head>
 <body>
-<div ng-app="myApp" ng-controller="formCtrl">
+<div ng-app="myApp" ng-controller="myCtrl">
+    <ul ng-model="currentView">
+        <li><button ng-click="currentView = 'CreateUser'">Create User</button></li>
+        <li><button ng-click="currentView = 'StartQuery'">Start Query</button></li>
+    </ul>
+    <div ng-show="currentView === 'CreateUser'">
     <h1>Create User</h1>
-
-    <form method="post" action="/createUser">
+    <form method="get" action="/createUser">
         First Name:<br>
         <input type="text" name="firstname" /><br>
         Last Name:<br>
         <input type="text" name="lastname" /><br>
         Email:<br>
-        <input type="email" name="email">
+        <input type="email" name="email"><br>
+        User ID:<br>
+        <input type="text" name="userid" />
         <br>
         <br>
         <input type="submit" />
     </form>
+    </div>
 
-    <!--
-    <form novalidate>
-        First Name:<br>
-        <input type="text" ng-model="user.firstName"><br>
-        Last Name:<br>
-        <input type="text" ng-model="user.lastName"><br>
-        Email:<br>
-        <input type="email" ng-model="user.email">
-        <br><br>
-        <button ng-click="createUser(user)">Submit</button>
-    </form>
-    <p>form = {{user}}</p>
-    -->
+    <div ng-show="currentView === 'StartQuery'">
+        <h1>Start Query</h1>
+        <form id="startQuery" action="/startSearch" method="post">
+            Have to Appear (IAB ids):<br>
+            <input type="text" name="haveToAppear" value="IAB-19"/><br>
+            Must not appear (IAB ids):<br>
+            <input type="text" name="cantAppear" value="IAB19-10"/><br>
+            Query Keywords:<br>
+            <input type="text" name="queries" value="apple"/><br>
+            Black List Domains:<br>
+            <input type="text" name="blackListDomains" value="ft.com">
+            <br>
+            <br>
+            <input type="submit" />
+        </form>
+    </div>
 </div>
 </body>
 </html>
