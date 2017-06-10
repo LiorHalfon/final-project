@@ -29,7 +29,7 @@
 					type="Submit">Feedback</button>
 		</form>
 
-		<form class="form-inline my-2 my-lg-0" _lpchecked="1">
+		<form th:action="@{/home/search}" method="get" class="form-inline my-2 my-lg-0" _lpchecked="1">
 			<input name="queryValue" class="form-control mr-sm-2" type="text" placeholder="Search">
 			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 		</form>
