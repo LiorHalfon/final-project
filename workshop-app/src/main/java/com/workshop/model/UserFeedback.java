@@ -38,6 +38,18 @@ public class UserFeedback {
 	@Column(name = "activity_type")
 	private String activityType;
 
+	@Column(name = "url")
+	private String url;
+
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 	public User getUser() {
 		return user;
 	}

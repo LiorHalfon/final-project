@@ -9,5 +9,7 @@ import java.util.List;
 
 @Repository("userFeedbackRepository")
 public interface UserFeedbackRepository extends JpaRepository<UserFeedback, Long> {
+
 	List<UserFeedback> findByUser(User user);
+
 }

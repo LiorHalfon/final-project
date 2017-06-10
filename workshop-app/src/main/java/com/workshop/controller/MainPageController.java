@@ -27,13 +27,14 @@ public class MainPageController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/admin/home/feedback", method = RequestMethod.POST)
+    @RequestMapping(value = "/home/feedback", method = RequestMethod.POST)
     public ModelAndView feedback(@Valid @ModelAttribute("activityType") String activityType) {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
-        userFeedbackService.sendFeedback(user, UserFeedback.ActivityType.valueOf(activityType));
-        modelAndView.setViewName("admin/home");
+        //TODO: set the url value from the article.url
+        userFeedbackService.sendFeedback(user, UserFeedback.ActivityType.valueOf(activityType), "http://www.yahoo.com");
+        modelAndView.setViewName("home");
         return modelAndView;
     }
 }

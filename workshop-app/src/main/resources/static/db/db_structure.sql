@@ -70,7 +70,8 @@ DROP TABLE IF EXISTS `user_feedback`;
 CREATE TABLE `user_feedback` (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `user_id` int(11) NOT NULL,
-  `timestamp` timestamp,
-  `activity_type` varchar(30),
+  `timestamp` timestamp NOT NULL,
+  `activity_type` varchar(30) NOT NULL,
+  `url` TEXT NOT NULL,
   CONSTRAINT `user_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

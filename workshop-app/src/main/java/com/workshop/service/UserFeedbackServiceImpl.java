@@ -20,11 +20,13 @@ public class UserFeedbackServiceImpl implements UserFeedbackService {
     UserFeedbackRepository userFeedbackRepository;
 
     @Override
-    public void sendFeedback(User user, UserFeedback.ActivityType activityType) {
+    public void sendFeedback(User user, UserFeedback.ActivityType activityType, String url) {
         UserFeedback uf = new UserFeedback();
         uf.setUser(user);
         uf.setTimestamp(new Timestamp(new Date().getTime()));
         uf.setActivityType(activityType);
+        uf.setUrl(url);
+
         userFeedbackRepository.save(uf);
     }
 

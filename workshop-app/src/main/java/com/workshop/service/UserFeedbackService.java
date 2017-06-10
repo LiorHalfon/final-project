@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserFeedbackService {
 
-	void sendFeedback(User user, UserFeedback.ActivityType activityType);
+	void sendFeedback(User user, UserFeedback.ActivityType activityType, String url);
 	List<UserFeedback> getAllUserFeedbacks(User user);
 	List<UserFeedback> getUserFeedbacks(User user, UserFeedback.ActivityType activityType);
 
