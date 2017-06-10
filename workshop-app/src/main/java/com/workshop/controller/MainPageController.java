@@ -27,6 +27,27 @@ public class MainPageController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping(value="/home", method = RequestMethod.GET)
+    public ModelAndView home(){
+        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());
+        modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
+        modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
+        modelAndView.setViewName("home");
+        return modelAndView;
+    }
+
+    @RequestMapping(value="/home/search", method = RequestMethod.GET)
+    public ModelAndView home(@Valid @ModelAttribute("queryValue") String queryValue) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        modelAndView.setViewName("home");
+
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/home/feedback", method = RequestMethod.POST)
     public ModelAndView feedback(@Valid @ModelAttribute("activityType") String activityType) {
         ModelAndView modelAndView = new ModelAndView();
