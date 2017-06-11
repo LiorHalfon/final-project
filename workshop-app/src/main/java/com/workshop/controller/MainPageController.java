@@ -5,6 +5,7 @@ import com.workshop.model.UserFeedback;
 import com.workshop.search.BingNewsFinder;
 import com.workshop.search.NewsFinder;
 import com.workshop.search.RelevantNews;
+import com.workshop.search.RelevantNewsView;
 import com.workshop.service.UserFeedbackService;
 import com.workshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,19 +84,46 @@ public class MainPageController {
             e.printStackTrace();
         }
 
+        //To Test server without really searching:
+//        RelevantNews tempRes;
+//        try {
+//            Summarize summ = new Summarize();
+//            summ.setSentences(new String[]{"hello", "lior", "this is my test sentence"});
+//            Sentiment sentiment = new Sentiment();
+//            sentiment.setPolarity("positive");
+//            sentiment.setPolarityConfidence(0.8);
+//            URL url = new URL("http://google.com");
+//            TaxonomyClassifications classifi = new TaxonomyClassifications();
+//            tempRes = new RelevantNews(summ, sentiment, url, classifi);
+//        }
+//        catch (MalformedURLException e) {
+//            e.printStackTrace();
+//            modelAndView.setViewName("error");
+//            return modelAndView;
+//        }
+//        List<RelevantNews> results = new ArrayList<>();
+//        results.add(tempRes);
+
         List<RelevantNews> results = newsFinder.GetResults();
-        modelAndView.setViewName("home");
+
+        List<RelevantNewsView> resultView = new ArrayList<>();
+        for (RelevantNews news : results) {
+            resultView.add(new RelevantNewsView(news));
+        }
+
+        modelAndView.addObject("results", resultView);
+        modelAndView.setViewName("results");
 
         return modelAndView;
     }
 
     @RequestMapping(value = "/home/feedback", method = RequestMethod.POST)
-    public ModelAndView feedback(@Valid @ModelAttribute("activityType") String activityType) {
+    public ModelAndView feedback(@Valid @ModelAttribute("activityType") String activityType,
+                                 @Valid @ModelAttribute("url") String url) {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
-        //TODO: set the url value from the article.url
-        userFeedbackService.sendFeedback(user, UserFeedback.ActivityType.valueOf(activityType), "http://www.yahoo.com");
+        userFeedbackService.sendFeedback(user, UserFeedback.ActivityType.valueOf(activityType), url);
         modelAndView.setViewName("home");
         return modelAndView;
     }

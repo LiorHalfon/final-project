@@ -18,18 +18,8 @@
 				type="Submit">Logout</button>
 		</form>
 		<br>
-		<form th:action="@{/home/feedback}" method="post">
-			<select name="activityType">
-				<option value="BLOCK_DOMAIN">Block Domain</option>
-				<option value="THUMBS_UP">Like</option>
-				<option value="THUMBS_DOWN">Dislike</option>
-			</select>
-
-			<button class="btn btn-md btn-danger btn-block" name="feedback"
-					type="Submit">Feedback</button>
-		</form>
 		<br>
-		<br>
+		<h2>Search</h2>
 		<form th:action="@{/home/search}" method="get" class="form-inline my-2 my-lg-0" _lpchecked="1">
 			<input name="haveToAppear" class="form-control mr-sm-2" type="text" placeholder="Have to Appear (IAB ids)">
 			<br>
