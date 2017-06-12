@@ -33,6 +33,6 @@ public class ResultsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
         userFeedbackService.sendFeedback(user, UserFeedback.ActivityType.valueOf(activityType), url);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity("Got " +activityType ,HttpStatus.OK);
     }
 }

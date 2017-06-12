@@ -19,6 +19,18 @@
 <script>
     $(document).ready(function() {
         $('#results').DataTable();
+
+        $("#feedbackForm").submit(function (e) {
+            $.ajax({
+                type: "POST",
+                url: "/results/feedback",
+                data: $("#feedbackForm").serialize(),
+                success: function (response) {
+                    alert(response + "\nThank you for your feedback!");
+                }
+            });
+            e.preventDefault();
+        });
     } );
 </script>
 <div class="container">
@@ -55,7 +67,7 @@
                     <td th:text="${result.classifications}"> Classifications </td>
                     <td th:text="${result.domain}"> Domain </td>
                     <td>
-                        <form th:action="@{/results/feedback}" method="post">
+                        <form id="feedbackForm">
                             <select name="activityType">
                                 <option value="BLOCK_DOMAIN">Block Domain</option>
                                 <option value="THUMBS_UP">Like</option>

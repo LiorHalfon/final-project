@@ -118,7 +118,7 @@ public class MainPageController {
             summ.setSentences(new String[]{"hello", "lior", "this is my test sentence"});
             Sentiment sentiment = new Sentiment();
             sentiment.setPolarity("positive");
-            sentiment.setPolarityConfidence(0.8);
+            sentiment.setPolarityConfidence(0.856248);
             URL url = new URL("http://google.com");
             TaxonomyClassifications classifi = new TaxonomyClassifications();
             Article article = new Article();
