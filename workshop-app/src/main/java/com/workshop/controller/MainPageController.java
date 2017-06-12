@@ -1,5 +1,9 @@
 package com.workshop.controller;
 
+import com.aylien.textapi.responses.Article;
+import com.aylien.textapi.responses.Sentiment;
+import com.aylien.textapi.responses.Summarize;
+import com.aylien.textapi.responses.TaxonomyClassifications;
 import com.workshop.model.User;
 import com.workshop.model.UserFeedback;
 import com.workshop.search.BingNewsFinder;
@@ -18,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -75,36 +81,23 @@ public class MainPageController {
                 }
             }
         }
+        List<RelevantNews> results;
+        Boolean useRealWebSearch = true;
 
-        NewsFinder newsFinder = new BingNewsFinder();
-        newsFinder.Init(haveToAppear,cantAppear,blackListDomains,queries,user);
-        try {
-            newsFinder.Start();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(useRealWebSearch) {
+            NewsFinder newsFinder = new BingNewsFinder();
+            newsFinder.Init(haveToAppear, cantAppear, blackListDomains, queries, user);
+            try {
+                newsFinder.Start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            results = newsFinder.GetResults();
         }
-
-        //To Test server without really searching:
-//        RelevantNews tempRes;
-//        try {
-//            Summarize summ = new Summarize();
-//            summ.setSentences(new String[]{"hello", "lior", "this is my test sentence"});
-//            Sentiment sentiment = new Sentiment();
-//            sentiment.setPolarity("positive");
-//            sentiment.setPolarityConfidence(0.8);
-//            URL url = new URL("http://google.com");
-//            TaxonomyClassifications classifi = new TaxonomyClassifications();
-//            tempRes = new RelevantNews(summ, sentiment, url, classifi);
-//        }
-//        catch (MalformedURLException e) {
-//            e.printStackTrace();
-//            modelAndView.setViewName("error");
-//            return modelAndView;
-//        }
-//        List<RelevantNews> results = new ArrayList<>();
-//        results.add(tempRes);
-
-        List<RelevantNews> results = newsFinder.GetResults();
+        else{
+            results = GetMockResults();
+        }
 
         List<RelevantNewsView> resultView = new ArrayList<>();
         for (RelevantNews news : results) {
@@ -117,14 +110,28 @@ public class MainPageController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/home/feedback", method = RequestMethod.POST)
-    public ModelAndView feedback(@Valid @ModelAttribute("activityType") String activityType,
-                                 @Valid @ModelAttribute("url") String url) {
-        ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());
-        userFeedbackService.sendFeedback(user, UserFeedback.ActivityType.valueOf(activityType), url);
-        modelAndView.setViewName("home");
-        return modelAndView;
+    //To Test server without really searching:
+    private List<RelevantNews> GetMockResults() {
+        RelevantNews tempRes;
+        try {
+            Summarize summ = new Summarize();
+            summ.setSentences(new String[]{"hello", "lior", "this is my test sentence"});
+            Sentiment sentiment = new Sentiment();
+            sentiment.setPolarity("positive");
+            sentiment.setPolarityConfidence(0.8);
+            URL url = new URL("http://google.com");
+            TaxonomyClassifications classifi = new TaxonomyClassifications();
+            Article article = new Article();
+            article.setTitle("Article Title");
+            tempRes = new RelevantNews(summ, sentiment, url, classifi,article);
+        }
+        catch (MalformedURLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+        List<RelevantNews> results = new ArrayList<>();
+        results.add(tempRes);
+
+        return results;
     }
 }

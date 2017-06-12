@@ -5,6 +5,7 @@ import com.aylien.textapi.responses.TaxonomyCategory;
 import java.net.URL;
 
 public class RelevantNewsView {
+    public String title;
     public String summary;
     public String sentiment;
     public String url;
@@ -12,8 +13,9 @@ public class RelevantNewsView {
     public String classifications;
 
     public RelevantNewsView(RelevantNews news) {
-        summary = "";
+        title = news.article.getTitle();
 
+        summary = "";
         String[] sentences = news.summary.getSentences();
         if(sentences != null) {
             for (String s : sentences) {

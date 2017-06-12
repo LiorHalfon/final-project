@@ -2,14 +2,8 @@ package com.workshop.search;
 
 import com.aylien.textapi.TextAPIClient;
 import com.aylien.textapi.TextAPIException;
-import com.aylien.textapi.parameters.ClassifyByTaxonomyParams;
-import com.aylien.textapi.parameters.ClassifyParams;
-import com.aylien.textapi.parameters.SentimentParams;
-import com.aylien.textapi.parameters.SummarizeParams;
-import com.aylien.textapi.responses.Classifications;
-import com.aylien.textapi.responses.Sentiment;
-import com.aylien.textapi.responses.Summarize;
-import com.aylien.textapi.responses.TaxonomyClassifications;
+import com.aylien.textapi.parameters.*;
+import com.aylien.textapi.responses.*;
 
 import java.net.URL;
 
@@ -51,7 +45,16 @@ public class TextAnalyser {
     public Summarize Summarize(URL url) throws TextAPIException {
         SummarizeParams.Builder builder = SummarizeParams.newBuilder();
         builder.setUrl(url);
-        builder.setNumberOfSentences(5);
+        builder.setNumberOfSentences(3);
         return  _client.summarize(builder.build());
     }
+
+    public Article ExtractArticle(URL url) throws TextAPIException {
+        ExtractParams.Builder builder = ExtractParams.newBuilder();
+        builder.setUrl(url);
+        builder.setBestImage(true);
+        return _client.extract(builder.build());
+    }
+
+
 }

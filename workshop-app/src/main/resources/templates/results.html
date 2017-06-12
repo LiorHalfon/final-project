@@ -14,17 +14,6 @@
 <div class="container">
 
     <br>
-    <!--<form th:action="@{/home/feedback}" method="post">-->
-        <!--<select name="activityType">-->
-            <!--<option value="BLOCK_DOMAIN">Block Domain</option>-->
-            <!--<option value="THUMBS_UP">Like</option>-->
-            <!--<option value="THUMBS_DOWN">Dislike</option>-->
-        <!--</select>-->
-
-        <!--<button class="btn btn-md btn-danger btn-block" name="feedback"-->
-                <!--type="Submit">Feedback</button>-->
-    <!--</form>-->
-
     <form th:action="@{/logout}" method="get">
         <button class="btn btn-md btn-danger btn-block" name="registration"
                 type="Submit">Logout</button>
@@ -36,6 +25,7 @@
         <table class="table table-bordered table-striped table-hover">
             <tr>
                 <th>#</th>
+                <th>Title</th>
                 <th>Summary</th>
                 <th>Sentiment</th>
                 <th>Classifications</th>
@@ -44,12 +34,13 @@
             </tr>
             <tr th:each="result,iterationstatus :${results}">
                 <td th:text="${iterationstatus.count}">1</td>
+                <td th:text="${result.title}">Title</td>
                 <td th:text="${result.summary}">Summary</td>
                 <td th:text="${result.sentiment}">Sentiment</td>
                 <td th:text="${result.classifications}"> Classifications </td>
                 <td th:text="${result.domain}"> Domain </td>
                 <td>
-                    <form th:action="@{/home/feedback}" method="post">
+                    <form th:action="@{/results/feedback}" method="post">
                         <select name="activityType">
                             <option value="BLOCK_DOMAIN">Block Domain</option>
                             <option value="THUMBS_UP">Like</option>
@@ -61,7 +52,6 @@
                                 type="Submit">Feedback</button>
                     </form>
                 </td>
-
             </tr>
         </table>
     </div>

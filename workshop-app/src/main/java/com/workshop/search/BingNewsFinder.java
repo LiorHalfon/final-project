@@ -1,16 +1,13 @@
 package com.workshop.search;
 
 import com.aylien.textapi.TextAPIException;
-import com.aylien.textapi.responses.Sentiment;
-import com.aylien.textapi.responses.Summarize;
-import com.aylien.textapi.responses.TaxonomyCategory;
+import com.aylien.textapi.responses.*;
 import com.workshop.bing.configuration.BingConfiguration;
 import com.workshop.bing.controllers.BingController;
 import com.workshop.bing.model.search.results.BingWebResponseData;
 import com.workshop.bing.model.search.results.result.BingNewsResponse;
 import com.workshop.bing.model.search.results.result.BingNewsResult;
 import com.workshop.model.User;
-import com.aylien.textapi.responses.TaxonomyClassifications;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.net.URL;
@@ -113,8 +110,9 @@ public class BingNewsFinder implements NewsFinder {
     }
 
     private void AddResultToRelevantNews(URL url, TaxonomyClassifications taxonomyClassifications) throws TextAPIException {
+        Article article = _textAnalyser.ExtractArticle(url);
         Summarize summary = _textAnalyser.Summarize(url);
         Sentiment sentiment = _textAnalyser.GetSentiment(summary.getText());
-        _relevantNewsList.add(new RelevantNews(summary, sentiment, url, taxonomyClassifications));
+        _relevantNewsList.add(new RelevantNews(summary, sentiment, url, taxonomyClassifications, article));
     }
 }
