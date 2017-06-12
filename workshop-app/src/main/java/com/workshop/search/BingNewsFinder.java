@@ -41,7 +41,7 @@ public class BingNewsFinder implements NewsFinder {
     }
 
     @Override
-    public void Start() throws Exception {
+        public void Start() throws Exception {
         while (!_queries.isEmpty())
         {
             String query = _queries.remove(0);

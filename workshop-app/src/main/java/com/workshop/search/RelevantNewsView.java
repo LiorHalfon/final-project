@@ -1,5 +1,6 @@
 package com.workshop.search;
 
+import com.aylien.textapi.responses.Sentiment;
 import com.aylien.textapi.responses.TaxonomyCategory;
 
 import java.net.URL;
@@ -7,7 +8,7 @@ import java.net.URL;
 public class RelevantNewsView {
     public String title;
     public String summary;
-    public String sentiment;
+    public Sentiment sentiment;
     public String url;
     public String domain;
     public String classifications;
@@ -23,8 +24,7 @@ public class RelevantNewsView {
             }
         }
 
-        sentiment = news.sentiment.getPolarity() +
-                ", Confidence: " + String.format("%.2f", news.sentiment.getPolarityConfidence());
+        sentiment = news.sentiment;
 
         url = news.url.toString();
         domain = getDomainName(news.url);

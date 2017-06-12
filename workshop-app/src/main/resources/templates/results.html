@@ -4,13 +4,23 @@
 
 <head>
     <title>Results Page</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+
+    <!--<link rel="stylesheet" type="text/css" th:href="@{/css/results.css}" />-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">
+
     <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
 </head>
 
 <body>
+<script>
+    $(document).ready(function() {
+        $('#results').DataTable();
+    } );
+</script>
 <div class="container">
 
     <br>
@@ -22,37 +32,43 @@
     <br>
     <br>
     <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover">
-            <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Summary</th>
-                <th>Sentiment</th>
-                <th>Classifications</th>
-                <th>Domain</th>
-                <th>Feedback</th>
-            </tr>
-            <tr th:each="result,iterationstatus :${results}">
-                <td th:text="${iterationstatus.count}">1</td>
-                <td th:text="${result.title}">Title</td>
-                <td th:text="${result.summary}">Summary</td>
-                <td th:text="${result.sentiment}">Sentiment</td>
-                <td th:text="${result.classifications}"> Classifications </td>
-                <td th:text="${result.domain}"> Domain </td>
-                <td>
-                    <form th:action="@{/results/feedback}" method="post">
-                        <select name="activityType">
-                            <option value="BLOCK_DOMAIN">Block Domain</option>
-                            <option value="THUMBS_UP">Like</option>
-                            <option value="THUMBS_DOWN">Dislike</option>
-                        </select>
+        <table id="results" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Summary</th>
+                    <th>Sentiment Polarity</th>
+                    <th>Sentiment Confidence</th>
+                    <th>Classifications</th>
+                    <th>Domain</th>
+                    <th>Feedback</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="result,iterationstatus :${results}">
+                    <td th:text="${iterationstatus.count}">1</td>
+                    <td th:text="${result.title}">Title</td>
+                    <td th:text="${result.summary}">Summary</td>
+                    <td th:text="${result.sentiment.polarity}">Sentiment Polarity</td>
+                    <td th:text="${result.sentiment.polarityConfidence}">Sentiment Confidence</td>
+                    <td th:text="${result.classifications}"> Classifications </td>
+                    <td th:text="${result.domain}"> Domain </td>
+                    <td>
+                        <form th:action="@{/results/feedback}" method="post">
+                            <select name="activityType">
+                                <option value="BLOCK_DOMAIN">Block Domain</option>
+                                <option value="THUMBS_UP">Like</option>
+                                <option value="THUMBS_DOWN">Dislike</option>
+                            </select>
 
-                        <input type="hidden" name="url" th:value="${result.url}">
-                        <button class="btn btn-md btn-danger" name="feedback"
-                                type="Submit">Feedback</button>
-                    </form>
-                </td>
-            </tr>
+                            <input type="hidden" name="url" th:value="${result.url}">
+                            <button class="btn btn-md btn-danger" name="feedback"
+                                    type="Submit">Feedback</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
 

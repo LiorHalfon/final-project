@@ -76,7 +76,7 @@ public class MainPageController {
         List<UserFeedback> userFB = userFeedbackService.getUserFeedbacks(user, UserFeedback.ActivityType.BLOCK_DOMAIN);
         if (userFB != null) {
             for (UserFeedback activity : userFB) {
-                if (activity.getActivityType().equals(UserFeedback.ActivityType.BLOCK_DOMAIN.toString())) {
+                if (activity.getActivityType().equals(UserFeedback.ActivityType.BLOCK_DOMAIN)) {
                     blackListDomains.add(activity.getUrl());
                 }
             }
