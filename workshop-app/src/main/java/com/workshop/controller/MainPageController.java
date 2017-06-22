@@ -13,6 +13,7 @@ import com.workshop.search.RelevantNews;
 import com.workshop.search.RelevantNewsView;
 import com.workshop.service.UserFeedbackService;
 import com.workshop.service.UserService;
+import de.svenjacobs.loremipsum.LoremIpsum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +30,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by ndayan on 10/06/2017.
@@ -107,10 +109,11 @@ public class MainPageController {
         }
 
 
+        //Digest mail from the results and dump it to a file
         try {
             MailComposer comp = new MailComposer();
-            String text = comp.ComposeHtml(resultView.get(0));
-            try(  PrintWriter out = new PrintWriter( "article.html" )  ){
+            String text = comp.ComposeMail(resultView, "Test Mail");
+            try(  PrintWriter out = new PrintWriter( "mail.html" )  ){
                 out.println( text );
             }
         } catch (Exception e) {
@@ -125,30 +128,63 @@ public class MainPageController {
 
     //To Test server without really searching:
     private List<RelevantNews> GetMockResults() {
-        RelevantNews tempRes;
+        RelevantNews firstRes;
+
+        Summarize summ = new Summarize();
+        summ.setSentences(new String[]{
+                "Every time Apple's developer conference rolls around we get a smattering of changes to the App Store Review guidelines.",
+                "This corpus of rules can be, in turns, opaque and explicit, and has caused a decent amount of consternation over the years for developers as they try to read into how Apple might interpret one rule or another."
+        });
+        Sentiment sentiment = new Sentiment();
+        sentiment.setPolarity("Positive");
+        sentiment.setPolarityConfidence(0.856248);
+        URL url = null;
         try {
-            Summarize summ = new Summarize();
-            summ.setSentences(new String[]{
-                    "Every time Apple's developer conference rolls around we get a smattering of changes to the App Store Review guidelines.",
-                    "This corpus of rules can be, in turns, opaque and explicit, and has caused a decent amount of consternation over the years for developers as they try to read into how Apple might interpret one rule or another."
-            });
-            Sentiment sentiment = new Sentiment();
-            sentiment.setPolarity("Positive");
-            sentiment.setPolarityConfidence(0.856248);
-            URL url = new URL("https://techcrunch.com/2017/06/21/apple-goes-after-clones-and-spam-on-the-app-store/");
-            TaxonomyClassifications classifi = new TaxonomyClassifications();
-            Article article = new Article();
-            article.setTitle("Apple goes after clones and spam on the App Store");
-            article.setImages(new String[]{"https://tctechcrunch2011.files.wordpress.com/2017/06/apple-liveblog0706.jpg?w=764&h=400&crop=1"});
-            tempRes = new RelevantNews(summ, sentiment, url, classifi,article);
+            url = new URL("https://techcrunch.com/2017/06/21/apple-goes-after-clones-and-spam-on-the-app-store/");
         }
         catch (MalformedURLException e) {
             e.printStackTrace();
-            return new ArrayList<>();
         }
+        TaxonomyClassifications classifi = new TaxonomyClassifications();
+        Article article = new Article();
+        article.setTitle("Apple goes after clones and spam on the App Store");
+        article.setImages(new String[]{"https://tctechcrunch2011.files.wordpress.com/2017/06/apple-liveblog0706.jpg?w=764&h=400&crop=1"});
+        firstRes = new RelevantNews(summ, sentiment, url, classifi,article);
+
         List<RelevantNews> results = new ArrayList<>();
-        results.add(tempRes);
+        results.add(firstRes);
+        for (int i=0;i<9;i++){
+            results.add(GenerateMockResults());
+        }
 
         return results;
+    }
+
+    private RelevantNews GenerateMockResults() {
+        LoremIpsum loremIpsum = new LoremIpsum();
+        Random rand = new Random();
+
+
+        Summarize summ = new Summarize();
+        summ.setSentences(new String[]{
+                loremIpsum.getWords(rand.nextInt(20) + 10),
+                loremIpsum.getWords(rand.nextInt(20) + 10)
+        });
+        Sentiment sentiment = new Sentiment();
+        sentiment.setPolarity(rand.nextInt(2) == 1 ?"Positive": "Negative");
+        sentiment.setPolarityConfidence(rand.nextFloat());
+        URL url = null;
+        try {
+            url = new URL("https://techcrunch.com/2017/06/21/apple-goes-after-clones-and-spam-on-the-app-store/");
+        }
+        catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        TaxonomyClassifications classifi = new TaxonomyClassifications();
+        Article article = new Article();
+        article.setTitle(loremIpsum.getWords(8));
+        article.setImages(new String[]{"http://loremflickr.com/320/240/business"});
+        return new RelevantNews(summ, sentiment, url, classifi,article);
+
     }
 }
