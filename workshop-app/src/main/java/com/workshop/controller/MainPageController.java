@@ -4,6 +4,7 @@ import com.aylien.textapi.responses.Article;
 import com.aylien.textapi.responses.Sentiment;
 import com.aylien.textapi.responses.Summarize;
 import com.aylien.textapi.responses.TaxonomyClassifications;
+import com.workshop.mailing.MailComposer;
 import com.workshop.model.User;
 import com.workshop.model.UserFeedback;
 import com.workshop.search.BingNewsFinder;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -82,7 +84,7 @@ public class MainPageController {
             }
         }
         List<RelevantNews> results;
-        Boolean useRealWebSearch = true;
+        Boolean useRealWebSearch = false;
 
         if(useRealWebSearch) {
             NewsFinder newsFinder = new BingNewsFinder();
@@ -104,6 +106,17 @@ public class MainPageController {
             resultView.add(new RelevantNewsView(news));
         }
 
+
+        try {
+            MailComposer comp = new MailComposer();
+            String text = comp.ComposeHtml(resultView.get(0));
+            try(  PrintWriter out = new PrintWriter( "article.html" )  ){
+                out.println( text );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         modelAndView.addObject("results", resultView);
         modelAndView.setViewName("results");
 
@@ -115,14 +128,18 @@ public class MainPageController {
         RelevantNews tempRes;
         try {
             Summarize summ = new Summarize();
-            summ.setSentences(new String[]{"hello", "lior", "this is my test sentence"});
+            summ.setSentences(new String[]{
+                    "Every time Apple's developer conference rolls around we get a smattering of changes to the App Store Review guidelines.",
+                    "This corpus of rules can be, in turns, opaque and explicit, and has caused a decent amount of consternation over the years for developers as they try to read into how Apple might interpret one rule or another."
+            });
             Sentiment sentiment = new Sentiment();
-            sentiment.setPolarity("positive");
+            sentiment.setPolarity("Positive");
             sentiment.setPolarityConfidence(0.856248);
-            URL url = new URL("http://google.com");
+            URL url = new URL("https://techcrunch.com/2017/06/21/apple-goes-after-clones-and-spam-on-the-app-store/");
             TaxonomyClassifications classifi = new TaxonomyClassifications();
             Article article = new Article();
-            article.setTitle("Article Title");
+            article.setTitle("Apple goes after clones and spam on the App Store");
+            article.setImages(new String[]{"https://tctechcrunch2011.files.wordpress.com/2017/06/apple-liveblog0706.jpg?w=764&h=400&crop=1"});
             tempRes = new RelevantNews(summ, sentiment, url, classifi,article);
         }
         catch (MalformedURLException e) {
