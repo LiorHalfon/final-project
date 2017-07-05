@@ -100,7 +100,7 @@ public class SearchThread extends Thread {
 
         //Digest mail from the results and dump it to a file
         try {
-            String text = mailComposer.ComposeMail(resultView, "Test Mail");
+            String text = mailComposer.ComposeMail(resultView, "MyBuzz");
             mailSender.sendMail("mybuzzworkshop@gmail.com", user.getEmail(), "subject", text);
 
         } catch (Exception e) {

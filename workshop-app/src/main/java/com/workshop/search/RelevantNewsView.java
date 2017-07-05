@@ -13,13 +13,17 @@ public class RelevantNewsView {
     private String domain;
     private String classifications;
     private String imageUrl;
+    private String sentimentImageUrl;
+
+    private static final String thumbUpUrl = "https://cdn2.iconfinder.com/data/icons/social-buttons-2/512/thumb_up-32.png";
+    private static final String thumbDownUrl = "https://cdn2.iconfinder.com/data/icons/social-buttons-2/512/thumb_down-32.png";
 
     public RelevantNewsView(RelevantNews news) {
         title = news.article.getTitle();
         String[] images = news.article.getImages();
         if(images.length < 1)
         {
-            imageUrl = ""; //TODO: "no image" image url
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/4/47/Comic_image_missing.png"; //TODO: "no image" image url
         }
         else{
             imageUrl = news.article.getImages()[0];
@@ -35,6 +39,8 @@ public class RelevantNewsView {
         }
 
         sentiment = news.sentiment;
+        sentimentImageUrl = sentiment.getPolarity().equalsIgnoreCase("positive")?
+                thumbUpUrl : thumbDownUrl;
 
         url = news.url.toString();
         domain = getDomainName(news.url);
@@ -107,5 +113,9 @@ public class RelevantNewsView {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getSentimentImageUrl() {
+        return sentimentImageUrl;
     }
 }

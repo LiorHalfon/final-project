@@ -1,133 +1,49 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>${title}</title>
-    <!--
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="initial-scale=1.0"><meta name="format-detection" content="telephone=no"><title>MOSAICO Responsive Email Designer</title><style type="text/css">.socialLinks {font-size: 6px;}
+.socialLinks a {display: inline-block;}
+.socialIcon {display: inline-block;vertical-align: top;padding-bottom: 0px;border-radius: 100%;}
+table.vb-row.halfpad {border-spacing: 0;padding-left: 9px;padding-right: 9px;}
+table.vb-row.fullwidth {border-spacing: 0;padding: 0;}
+table.vb-container.fullwidth {padding-left: 0;padding-right: 0;}</style><style type="text/css">
+    /* yahoo, hotmail */
+    .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div{ line-height: 100%; }
+    .yshortcuts a{ border-bottom: none !important; }
+    .vb-outer{ min-width: 0 !important; }
+    .RMsgBdy, .ExternalClass{
+        width: 100%;
+        background-color: #3f3f3f;
+        background-color: #3f3f3f}
 
+    /* outlook */
+    table{ mso-table-rspace: 0pt; mso-table-lspace: 0pt; }
+    #outlook a{ padding: 0; }
+    img{ outline: none; text-decoration: none; border: none; -ms-interpolation-mode: bicubic; }
+    a img{ border: none; }
 
-    COLORE INTENSE  #9C010F
-    COLORE LIGHT #EDE8DA
-
-    TESTO LIGHT #3F3D33
-    TESTO INTENSE #ffffff
-
-
-     --><meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <style type="text/css">#ko_twocolumnBlock_3 .textsmallintenseStyle a, #ko_twocolumnBlock_3 .textsmallintenseStyle a:link, #ko_twocolumnBlock_3 .textsmallintenseStyle a:visited, #ko_twocolumnBlock_3 .textsmallintenseStyle a:hover {color: #fff;color: ;text-decoration: none;text-decoration: none;font-weight: bold;}
-    #ko_twocolumnBlock_3 .textsmalllightStyle a, #ko_twocolumnBlock_3 .textsmalllightStyle a:link, #ko_twocolumnBlock_3 .textsmalllightStyle a:visited, #ko_twocolumnBlock_3 .textsmalllightStyle a:hover {color: #3f3d33;color: ;text-decoration: none;text-decoration: none;font-weight: bold;}
-    #ko_compactarticlerightBlock_5 .articletextintenseStyle a, #ko_compactarticlerightBlock_5 .articletextintenseStyle a:link, #ko_compactarticlerightBlock_5 .articletextintenseStyle a:visited, #ko_compactarticlerightBlock_5 .articletextintenseStyle a:hover {color: #fff;color: ;text-decoration: none;text-decoration: none;font-weight: bold;}
-    #ko_compactarticlerightBlock_5 .articletextlightStyle a, #ko_compactarticlerightBlock_5 .articletextlightStyle a:link, #ko_compactarticlerightBlock_5 .articletextlightStyle a:visited, #ko_compactarticlerightBlock_5 .articletextlightStyle a:hover {color: #3f3d33;color: ;text-decoration: none;text-decoration: none;font-weight: bold;}
-    #ko_compactarticleBlock_4 .articletextintenseStyle a, #ko_compactarticleBlock_4 .articletextintenseStyle a:link, #ko_compactarticleBlock_4 .articletextintenseStyle a:visited, #ko_compactarticleBlock_4 .articletextintenseStyle a:hover {color: #fff;color: ;text-decoration: none;text-decoration: none;font-weight: bold;}
-    #ko_compactarticleBlock_4 .articletextlightStyle a, #ko_compactarticleBlock_4 .articletextlightStyle a:link, #ko_compactarticleBlock_4 .articletextlightStyle a:visited, #ko_compactarticleBlock_4 .articletextlightStyle a:hover {color: #3f3d33;color: ;text-decoration: none;text-decoration: none;font-weight: bold;}</style>
-    <style type="text/css">
-        /* CLIENT-SPECIFIC STYLES */
-        #outlook a{padding:0;} /* Force Outlook to provide a "view in browser" message */
-        .ReadMsgBody{width:100%;} .ExternalClass{width:100%;} /* Force Hotmail to display emails at full width */
-        .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div{line-height: 100%;} /* Force Hotmail to display normal line spacing */
-        body, table, td, a{-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;} /* Prevent WebKit and Windows mobile changing default text sizes */
-        table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;} /* Remove spacing between tables in Outlook 2007 and up */
-        img{-ms-interpolation-mode:bicubic;} /* Allow smoother rendering of resized image in Internet Explorer */
-
-        /* RESET STYLES */
-        body{margin:0; padding:0;}
-        img{border:0; height:auto; line-height:100%; outline:none; text-decoration:none;}
-        table{border-collapse:collapse !important;}
-        body{height:100% !important; margin:0; padding:0; width:100% !important;}
-
-        /* iOS BLUE LINKS */
-        .appleBody a{color:#68440a; text-decoration: none;}
-        .appleFooter a{color:#999999; text-decoration: none;}
-
-        /* MOBILE STYLES */
-        @media screen and (max-width: 525px) {
-
-            /* ALLOWS FOR FLUID TABLES */
-            table[class="wrapper"]{
-                width:100% !important;
-                min-width:0px !important;
-            }
-
-            /* USE THESE CLASSES TO HIDE CONTENT ON MOBILE */
-            td[class="mobile-hide"]{
-                display:none;}
-
-            img[class="mobile-hide"]{
-                display: none !important;
-            }
-
-            img[class="img-max"]{
-                width:100% !important;
-                max-width: 100% !important;
-                height:auto !important;
-            }
-
-            /* FULL-WIDTH TABLES */
-            table[class="responsive-table"]{
-                width:100%!important;
-            }
-
-            /* UTILITY CLASSES FOR ADJUSTING PADDING ON MOBILE */
-            td[class="padding"]{
-                padding: 10px 5% 15px 5% !important;
-            }
-
-            td[class="padding-copy"]{
-                padding: 10px 5% 10px 5% !important;
-                text-align: center;
-            }
-
-            td[class="padding-meta"]{
-                padding: 30px 5% 0px 5% !important;
-                text-align: center;
-            }
-
-            td[class="no-pad"]{
-                padding: 0 0 0px 0 !important;
-            }
-
-            td[class="no-padding"]{
-                padding: 0 !important;
-            }
-
-            td[class="section-padding"]{
-                padding: 10px 15px 10px 15px !important;
-            }
-
-            td[class="section-padding-bottom-image"]{
-                padding: 10px 15px 0 15px !important;
-            }
-
-            /* ADJUST BUTTONS ON MOBILE */
-            td[class="mobile-wrapper"]{
-                padding: 10px 5% 15px 5% !important;
-            }
-
-            table[class="mobile-button-container"]{
-                margin:0 auto;
-                width:100% !important;
-            }
-
-            a[class="mobile-button"]{
-                width:80% !important;
-                padding: 15px !important;
-                border: 0 !important;
-                font-size: 16px !important;
-            }
-
+    @media screen and (max-device-width: 600px), screen and (max-width: 600px) {
+        table.vb-container, table.vb-row{
+            width: 95% !important;
         }
-    </style>
-</head>
-<body style="margin: 0; padding: 0;" bgcolor="#ffffff" align="center">
 
-<!-- PREHEADER -->
-<table border="0" cellpadding="0" cellspacing="0" width="100%" id="ko_titleBlock_6"><tbody><tr class="row-a">
-    <td bgcolor="#9C010F" align="center" class="section-padding" style="padding: 30px 15px 0px 15px;">
-        <table border="0" cellpadding="0" cellspacing="0" width="500" style="padding: 0 0 20px 0;" class="responsive-table">
-            <!-- TITLE --><tbody><tr>
-            <td align="center" class="padding-copy" colspan="2" style="padding: 0 0 10px 0px; font-size: 25px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #ffffff;">${title}</td>
-        </tr></tbody>
-        </table>
-    </td>
-</tr></tbody></table>
+        .mobile-hide{ display: none !important; }
+        .mobile-textcenter{ text-align: center !important; }
+
+        .mobile-full{
+            float: none !important;
+            width: 100% !important;
+            max-width: none !important;
+            padding-right: 0 !important;
+            padding-left: 0 !important;
+        }
+        img.mobile-full{
+            width: 100% !important;
+            max-width: none !important;
+            height: auto !important;
+        }
+    }
+</style><style type="text/css">#ko_tripleArticleBlock_5 .links-color a:visited, #ko_tripleArticleBlock_5 .links-color a:hover {color: #3f3f3f;color: #3f3f3f;text-decoration: underline;}
+#ko_doubleArticleBlock_4 .links-color a:visited, #ko_doubleArticleBlock_4 .links-color a:hover {color: #3f3f3f;color: #3f3f3f;text-decoration: underline;}
+#ko_singleArticleBlock_3 .links-color a:visited, #ko_singleArticleBlock_3 .links-color a:hover {color: #3f3f3f;color: #3f3f3f;text-decoration: underline;}
+#ko_footerBlock_2 .links-color a:visited, #ko_footerBlock_2 .links-color a:hover {color: #ccc;color: #ccc;text-decoration: underline;}</style></head><body bgcolor="#3f3f3f" text="#919191" alink="#cccccc" vlink="#cccccc" style="margin: 0;padding: 0;background-color: #3f3f3f;color: #919191;">
+
+<center>
