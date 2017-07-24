@@ -57,8 +57,7 @@ public class MainPageController {
 
         taskExecutor.execute(searchThread);
 
-        //TODO: switch to another page
-        modelAndView.setViewName("results");
+        modelAndView.setViewName("search-started");
 
         return modelAndView;
     }
