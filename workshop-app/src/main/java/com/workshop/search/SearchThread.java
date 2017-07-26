@@ -4,6 +4,9 @@ import com.aylien.textapi.responses.Article;
 import com.aylien.textapi.responses.Sentiment;
 import com.aylien.textapi.responses.Summarize;
 import com.aylien.textapi.responses.TaxonomyClassifications;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.workshop.service.SearchResultsService;
 import com.workshop.service.mail.MailComposer;
 import com.workshop.model.User;
 import com.workshop.model.UserFeedback;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,6 +35,9 @@ public class SearchThread extends Thread {
 
     @Autowired
     private UserFeedbackService userFeedbackService;
+
+    @Autowired
+    private SearchResultsService searchResultsService;
 
     @Autowired
     private MailSender mailSender;
@@ -98,6 +105,14 @@ public class SearchThread extends Thread {
             resultView.add(new RelevantNewsView(news));
         }
 
+        Gson gson = new Gson();
+        String json = gson.toJson(resultView);
+
+        //To Convert it back:
+//        Type listType = new TypeToken<ArrayList<RelevantNewsView>>(){}.getType();
+//        List<RelevantNewsView> resultView2 = gson.fromJson(json, listType);
+
+        searchResultsService.saveResults(resultsId, json);
 
         //Digest mail from the results and dump it to a file
         try {

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository("searchResultsRepository")
 public interface SearchResultsRepository extends JpaRepository<SearchResults, Long> {
-
+    SearchResults findByResultsId(int resultsId);
 }

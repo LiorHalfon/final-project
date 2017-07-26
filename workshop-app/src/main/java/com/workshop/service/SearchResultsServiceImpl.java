@@ -17,7 +17,10 @@ public class SearchResultsServiceImpl implements SearchResultsService {
 
     @Override
     public void saveResults(int resultsId, String resultsJson) {
-
+        SearchResults searchResults = getResultsByResultsId(resultsId);
+        searchResults.setResults(resultsJson);
+        searchResults.setSearchEndTime(new Timestamp(new Date().getTime()));
+        searchResultsRepository.save(searchResults);
     }
 
     @Override
@@ -28,5 +31,10 @@ public class SearchResultsServiceImpl implements SearchResultsService {
 
         SearchResults saved = searchResultsRepository.save(searchResults);
         return saved.getResultsId();
+    }
+
+    @Override
+    public SearchResults getResultsByResultsId(int resultsId) {
+        return searchResultsRepository.findByResultsId(resultsId);
     }
 }
