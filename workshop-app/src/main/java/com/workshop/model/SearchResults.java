@@ -21,7 +21,7 @@ public class SearchResults {
     private String results;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_USER"))
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "user_id_fk"))
     private User user;
 
     public int getResultsId() {

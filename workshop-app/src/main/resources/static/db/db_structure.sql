@@ -83,5 +83,5 @@ CREATE TABLE `search_results` (
   `search_end_time` DATETIME NULL,
   `results` JSON NULL,
   `user_id` INT NOT NULL NULL,
-  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+  CONSTRAINT `user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
