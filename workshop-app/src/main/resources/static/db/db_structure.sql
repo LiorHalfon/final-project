@@ -75,3 +75,13 @@ CREATE TABLE `user_feedback` (
   `url` TEXT NOT NULL,
   CONSTRAINT `user_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `search_results`;
+CREATE TABLE `search_results` (
+  `results_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `search_start_time` DATETIME NOT NULL,
+  `search_end_time` DATETIME NULL,
+  `results` JSON NULL,
+  `user_id` INT NOT NULL NULL,
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

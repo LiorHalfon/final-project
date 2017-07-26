@@ -2,6 +2,7 @@ package com.workshop.controller;
 
 import com.workshop.model.User;
 import com.workshop.search.*;
+import com.workshop.service.SearchResultsService;
 import com.workshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -23,6 +24,9 @@ public class MainPageController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SearchResultsService searchResultsService;
 
     @Autowired
     private ThreadPoolTaskExecutor taskExecutor;
@@ -50,10 +54,13 @@ public class MainPageController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
 
+        int resultsId = searchResultsService.getNextResultsId(user);
+
         searchThread.setQueryValueParam(queryValueParam);
         searchThread.setHaveToAppearParam(haveToAppearParam);
         searchThread.setCantAppearParam(cantAppearParam);
         searchThread.setUser(user);
+        searchThread.setResultsId(resultsId);
 
         taskExecutor.execute(searchThread);
 

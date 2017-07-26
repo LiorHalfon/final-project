@@ -42,6 +42,7 @@ public class SearchThread extends Thread {
     private String cantAppearParam;
     private String queryValueParam;
     private User user;
+    private int resultsId;
 //
 //    public SearchThread(User user, String haveToAppearParam, String cantAppearParam, String queryValueParam) {
 //        this.haveToAppearParam = haveToAppearParam;
@@ -123,6 +124,8 @@ public class SearchThread extends Thread {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public void setResultsId(int resultsId) { this.resultsId = resultsId; }
 
     //To Test server without really searching:
     private List<RelevantNews> GetMockResults() {
