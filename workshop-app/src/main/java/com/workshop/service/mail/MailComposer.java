@@ -1,7 +1,6 @@
 package com.workshop.service.mail;
 
 import com.workshop.search.RelevantNewsView;
-import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class MailComposer {
     @Autowired
     private FreeMarkerConfigurer freeMarkerConfig;
 
-    public String ComposeMail(List<RelevantNewsView> news, String mailTitle) throws IOException, TemplateException {
+    public String ComposeMail(List<RelevantNewsView> news, String mailTitle, int resultsId) throws IOException, TemplateException {
         String mail = "";
 
         mail += CompileMailHeader("header.html", mailTitle);
@@ -38,7 +37,8 @@ public class MailComposer {
                 mail += CompileArticle("big-article.html", news.get(i));
         }
 
-        mail += freeMarkerConfig.getConfiguration().getTemplate("footer.html").toString();
+
+        mail += CompileMailFooter("footer.html", resultsId);
 
         return mail;
     }
@@ -69,6 +69,15 @@ public class MailComposer {
 
         Map<String, Object> model = new HashMap<>();
         model.put("title", mailTitle);
+
+        return processTemplateIntoString(template, model);
+    }
+
+    private String CompileMailFooter(String templateName, int resultsId) throws IOException, TemplateException {
+        Template template = freeMarkerConfig.getConfiguration().getTemplate(templateName);
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("resultsId", resultsId);
 
         return processTemplateIntoString(template, model);
     }
