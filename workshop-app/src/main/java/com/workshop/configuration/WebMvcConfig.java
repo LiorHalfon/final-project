@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
-import java.net.URL;
 import java.util.Properties;
 
 @Configuration
@@ -62,9 +61,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public FreeMarkerConfigurer freeMarkerConfigurer() {
 		FreeMarkerConfigurer freeMarkerConfig = new FreeMarkerConfigurer();
-//		ClassLoader classLoader = getClass().getClassLoader();
-//		URL resource = classLoader.getResource("templates/mail-templates/");
-//		freeMarkerConfig.setTemplateLoaderPath("/templates/mail-templates/");
 		freeMarkerConfig.setTemplateLoaderPath("classpath:/templates/mail-templates/");
 		freeMarkerConfig.setDefaultEncoding("UTF-8");
 		freeMarkerConfig.setPreferFileSystemAccess(false);

@@ -36,12 +36,6 @@ public class MailComposer {
                 i += 1;
             } else
                 mail += CompileArticle("big-article.html", news.get(i));
-
-//            if (i % 2 == 0) {
-//                mail += CompileArticle("lightArticle.html", news.get(i));
-//            } else {
-//                mail += CompileArticle("redArticle.html", news.get(i));
-//            }
         }
 
         mail += freeMarkerConfig.getConfiguration().getTemplate("footer.html").toString();
