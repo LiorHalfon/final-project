@@ -26,9 +26,7 @@ public class SearchResultsServiceImpl implements SearchResultsService {
         searchResults.setUser(user);
         searchResults.setSearchStartTime(new Timestamp(new Date().getTime()));
 
-        //SearchResults saved = searchResultsRepository.save(searchResults);
-        //return saved.getResultsId();
-
-        return 0;
+        SearchResults saved = searchResultsRepository.save(searchResults);
+        return saved.getResultsId();
     }
 }
