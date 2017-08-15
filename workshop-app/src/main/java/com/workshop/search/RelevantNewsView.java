@@ -4,26 +4,31 @@ import com.aylien.textapi.responses.Sentiment;
 import com.aylien.textapi.responses.TaxonomyCategory;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RelevantNewsView {
+    private int id;
     private String title;
     private String summary;
     private Sentiment sentiment;
     private String url;
     private String domain;
-    private String classifications;
+    private List<String> classifications;
     private String imageUrl;
     private String sentimentImageUrl;
 
-    private static final String thumbUpUrl = "https://cdn2.iconfinder.com/data/icons/social-buttons-2/512/thumb_up-32.png";
-    private static final String thumbDownUrl = "https://cdn2.iconfinder.com/data/icons/social-buttons-2/512/thumb_down-32.png";
+    private static final String positiveFaceUrl = "https://cdn2.iconfinder.com/data/icons/emoticons-17/24/emoticons-01-32.png";
+    private static final String negativeFaceUrl = "https://cdn2.iconfinder.com/data/icons/emoticons-17/24/emoticons-02-32.png";
+    private static final String neutralFaceUrl = "https://cdn2.iconfinder.com/data/icons/emoticons-17/24/emoticons-04-32.png";
 
-    public RelevantNewsView(RelevantNews news) {
+    public RelevantNewsView(RelevantNews news, int resultId) {
+        this.id = resultId;
         title = news.article.getTitle();
         String[] images = news.article.getImages();
         if(images.length < 1)
         {
-            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/4/47/Comic_image_missing.png"; //TODO: "no image" image url
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/4/47/Comic_image_missing.png"; //"no image" image url
         }
         else{
             imageUrl = news.article.getImages()[0];
@@ -39,17 +44,27 @@ public class RelevantNewsView {
         }
 
         sentiment = news.sentiment;
-        sentimentImageUrl = sentiment.getPolarity().equalsIgnoreCase("positive")?
-                thumbUpUrl : thumbDownUrl;
+        switch (sentiment.getPolarity().toLowerCase()) {
+            case "positive":
+                sentimentImageUrl = positiveFaceUrl;
+                break;
+            case "negative":
+                sentimentImageUrl = negativeFaceUrl;
+                break;
+            case "neutral":
+            default:
+                sentimentImageUrl = neutralFaceUrl;
+                break;
+        }
 
         url = news.url.toString();
         domain = getDomainName(news.url);
 
-        classifications = "";
+        classifications = new ArrayList<>();
         TaxonomyCategory[] categories = news.classifications.getCategories();
         if(categories != null) {
             for (TaxonomyCategory c : categories) {
-                classifications += c.getLabel() + " " + c.getId() + "\n\n";
+                classifications.add(c.getLabel());
             }
         }
     }
@@ -99,11 +114,11 @@ public class RelevantNewsView {
         this.domain = domain;
     }
 
-    public String getClassifications() {
+    public List<String> getClassifications() {
         return classifications;
     }
 
-    public void setClassifications(String classifications) {
+    public void setClassifications(List<String> classifications) {
         this.classifications = classifications;
     }
 
@@ -117,5 +132,13 @@ public class RelevantNewsView {
 
     public String getSentimentImageUrl() {
         return sentimentImageUrl;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

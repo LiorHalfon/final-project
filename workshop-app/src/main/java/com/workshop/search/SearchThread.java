@@ -100,7 +100,7 @@ public class SearchThread extends Thread {
 
         List<RelevantNewsView> resultView = new ArrayList<>();
         for (RelevantNews news : results) {
-            resultView.add(new RelevantNewsView(news));
+            resultView.add(new RelevantNewsView(news, resultsId));
         }
 
         Gson gson = new Gson();
@@ -154,11 +154,11 @@ public class SearchThread extends Thread {
         catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        TaxonomyClassifications classifi = new TaxonomyClassifications();
+        TaxonomyClassifications classifications = new TaxonomyClassifications();
         Article article = new Article();
         article.setTitle("Apple goes after clones and spam on the App Store");
         article.setImages(new String[]{"https://tctechcrunch2011.files.wordpress.com/2017/06/apple-liveblog0706.jpg?w=764&h=400&crop=1"});
-        firstRes = new RelevantNews(summ, sentiment, url, classifi,article);
+        firstRes = new RelevantNews(summ, sentiment, url, classifications,article);
 
         List<RelevantNews> results = new ArrayList<>();
         results.add(firstRes);
@@ -189,11 +189,11 @@ public class SearchThread extends Thread {
         catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        TaxonomyClassifications classifi = new TaxonomyClassifications();
+        TaxonomyClassifications classifications = new TaxonomyClassifications();
         Article article = new Article();
         article.setTitle(loremIpsum.getWords(8));
         article.setImages(new String[]{"http://loremflickr.com/320/240/business"});
-        return new RelevantNews(summ, sentiment, url, classifi,article);
+        return new RelevantNews(summ, sentiment, url, classifications,article);
 
     }
 }

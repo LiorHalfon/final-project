@@ -62,4 +62,20 @@ public class ResultsController {
         userFeedbackService.sendFeedback(user, UserFeedback.ActivityType.valueOf(activityType), url);
         return new ResponseEntity("Got " +activityType ,HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/results/view/article", method = RequestMethod.GET)
+    public ModelAndView  viewArticle(@Valid @ModelAttribute("resultsId") int resultId,
+                                     @Valid @ModelAttribute("index") int index) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        SearchResults searchResults = searchResultsService.getResultsByResultsId(resultId);
+
+        Type listType = new TypeToken<ArrayList<RelevantNewsView>>(){}.getType();
+        Gson gson = new Gson();
+        List<RelevantNewsView> resultView = gson.fromJson(searchResults.getResults(), listType);
+
+        modelAndView.addObject("article", resultView.get(index));
+        modelAndView.setViewName("article");
+        return modelAndView;
+    }
 }

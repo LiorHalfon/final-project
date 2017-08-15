@@ -49,34 +49,28 @@
                 <tr>
                     <th>#</th>
                     <th>Title</th>
-                    <th>Summary</th>
                     <th>Sentiment Polarity</th>
-                    <th>Sentiment Confidence</th>
-                    <th>Classifications</th>
+                    <th>Categories</th>
                     <th>Domain</th>
-                    <th>Feedback</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="result,iterationstatus :${results}">
                     <td th:text="${iterationstatus.count}">1</td>
                     <td th:text="${result.title}">Title</td>
-                    <td th:text="${result.summary}">Summary</td>
                     <td th:text="${result.sentiment.polarity}">Sentiment Polarity</td>
-                    <td th:text="${result.sentiment.polarityConfidence}">Sentiment Confidence</td>
-                    <td th:text="${result.classifications}"> Classifications </td>
+                    <td>
+                    <ul>
+                        <li th:each="item : ${result.classifications}" th:text="${item}">Classification</li>
+                    </ul>
+                    </td>
                     <td th:text="${result.domain}"> Domain </td>
                     <td>
-                        <form id="feedbackForm">
-                            <select name="activityType">
-                                <option value="BLOCK_DOMAIN">Block Domain</option>
-                                <option value="THUMBS_UP">Like</option>
-                                <option value="THUMBS_DOWN">Dislike</option>
-                            </select>
-
-                            <input type="hidden" name="url" th:value="${result.url}">
-                            <button class="btn btn-md btn-danger" name="feedback"
-                                    type="Submit">Feedback</button>
+                        <form th:action="@{/results/view/article}" method="get">
+                            <input type="hidden" name="resultsId" th:value="${result.id}">
+                            <input type="hidden" name="index" th:value="${iterationstatus.count - 1}">
+                            <button class="btn btn-md btn-danger" type="Submit">Read More</button>
                         </form>
                     </td>
                 </tr>
