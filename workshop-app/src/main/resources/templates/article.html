@@ -27,11 +27,11 @@
     } );
 </script>
 <div class="container">
-    <img style="margin: 10px;" th:src="${article.imageUrl}" alt=""/>
+    <img class="img-responsive" style="max-width: 100%; max-height: 80%" th:src="${article.imageUrl}" alt=""/>
     <br>
     <h1 th:text="${article.title}"></h1>
     <p><span style="color: #808080;" th:text="${article.domain}"></span></p>
-    <h4><img class="gr-progress" th:src="${article.sentimentImageUrl}" alt="" width="32" height="32" />&nbsp;&nbsp;<sup><span th:text="${article.sentiment.polarityConfidence}"></span>% Confidence</sup></h4>
+    <h4><img class="gr-progress" th:src="${article.sentimentImageUrl}" alt="" width="32" height="32" />&nbsp;&nbsp;<span th:text="${#numbers.formatDecimal(article.sentiment.polarityConfidence * 100,2,0)}"></span>% Confidence</h4>
     <p th:text="${article.summary}"></p>
     <br>
     <h4>Categories:</h4>
@@ -40,20 +40,27 @@
     </ul>
     <br>
     <br>
-    <a href="javascript:history.back()" class="col-md-1 btn btn-md btn-warning">Go Back</a>
-    <a th:href="${article.url}" class="col-md-2 col-md-offset-1 btn btn-md btn-primary">Go To Source Website</a>
-    <form id="feedbackForm" class="col-md-4 col-md-offset-1">
-        <select name="activityType">
-            <option value="BLOCK_DOMAIN">Block Domain</option>
-            <option value="THUMBS_UP">Like</option>
-            <option value="THUMBS_DOWN">Dislike</option>
-        </select>
+    <div class="row">
+        <div class="col-xs-12">
+            <form th:action="@{/results/view}" method="get">
+                <input type="hidden" name="resultsId" th:value="${article.id}">
+                <button class="col-md-1 btn btn-md btn-warning"
+                        type="Submit">Go Back</button>
+            </form>
+            <a th:href="${article.url}" class="col-md-2 col-md-offset-1 btn btn-md btn-primary">Go To Source Website</a>
+            <form id="feedbackForm" class="col-md-4 col-md-offset-1">
+                <select name="activityType">
+                    <option value="BLOCK_DOMAIN">Block Domain</option>
+                    <option value="THUMBS_UP">Like</option>
+                    <option value="THUMBS_DOWN">Dislike</option>
+                </select>
 
-        <input type="hidden" name="url" th:value="${article.url}">
-        <button class="btn btn-md btn-danger" name="feedback"
-                type="Submit">Feedback</button>
-    </form>
-
+                <input type="hidden" name="url" th:value="${article.url}">
+                <button class="btn btn-md btn-danger" name="feedback"
+                        type="Submit">Feedback</button>
+            </form>
+        </div>
+    </div>
     <br>
     <br>
     <br>
