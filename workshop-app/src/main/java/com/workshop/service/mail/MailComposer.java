@@ -20,11 +20,17 @@ public class MailComposer {
     @Autowired
     private FreeMarkerConfigurer freeMarkerConfig;
 
+    public String ComposeSearchDoneMail(String mailTitle, int resultsId) throws IOException, TemplateException {
+        String mail = "";
+        mail += CompileMailHeader("header.html", mailTitle);
+        mail += CompileTemplateWithResultId("search-done.html", resultsId);
+        mail += CompileTemplateWithResultId("footer.html", resultsId);
+        return mail;
+    }
+
     public String ComposeMail(List<RelevantNewsView> news, String mailTitle, int resultsId) throws IOException, TemplateException {
         String mail = "";
-
         mail += CompileMailHeader("header.html", mailTitle);
-
         for (int i = 0; i < news.size(); i++) {
 
             if (i >= 3 && i + 2 < news.size()) {
@@ -37,9 +43,7 @@ public class MailComposer {
                 mail += CompileArticle("big-article.html", news.get(i));
         }
 
-
-        mail += CompileMailFooter("footer.html", resultsId);
-
+        mail += CompileTemplateWithResultId("footer.html", resultsId);
         return mail;
     }
 
@@ -60,25 +64,20 @@ public class MailComposer {
 
     private String CompileArticle(String templateName, RelevantNewsView news) throws IOException, TemplateException {
         Template template = freeMarkerConfig.getConfiguration().getTemplate(templateName);
-
         return processTemplateIntoString(template, news);
     }
 
     private String CompileMailHeader(String templateName, String mailTitle) throws IOException, TemplateException {
         Template template = freeMarkerConfig.getConfiguration().getTemplate(templateName);
-
         Map<String, Object> model = new HashMap<>();
         model.put("title", mailTitle);
-
         return processTemplateIntoString(template, model);
     }
 
-    private String CompileMailFooter(String templateName, int resultsId) throws IOException, TemplateException {
+    private String CompileTemplateWithResultId(String templateName, int resultsId) throws IOException, TemplateException {
         Template template = freeMarkerConfig.getConfiguration().getTemplate(templateName);
-
         Map<String, Object> model = new HashMap<>();
         model.put("resultsId", resultsId);
-
         return processTemplateIntoString(template, model);
     }
 }

@@ -48,13 +48,6 @@ public class SearchThread extends Thread {
     private String queryValueParam;
     private User user;
     private int resultsId;
-//
-//    public SearchThread(User user, String haveToAppearParam, String cantAppearParam, String queryValueParam) {
-//        this.haveToAppearParam = haveToAppearParam;
-//        this.cantAppearParam = cantAppearParam;
-//        this.queryValueParam = queryValueParam;
-//        this.user = user;
-//    }
 
     @Override
     public void run() {
@@ -107,11 +100,9 @@ public class SearchThread extends Thread {
         String json = gson.toJson(resultView);
         searchResultsService.saveResults(resultsId, json);
 
-        //Digest mail from the results and dump it to a file
         try {
-            String text = mailComposer.ComposeMail(resultView, "MyBuzz", resultsId);
-            mailSender.sendMail("mybuzzworkshop@gmail.com", user.getEmail(), "subject", text);
-
+            String html = mailComposer.ComposeSearchDoneMail("MyBuzz Search Completed", resultsId);
+            mailSender.sendMail("mybuzzworkshop@gmail.com", user.getEmail(), queryValueParam + " Search Completed", html);
         } catch (Exception e) {
             e.printStackTrace();
         }

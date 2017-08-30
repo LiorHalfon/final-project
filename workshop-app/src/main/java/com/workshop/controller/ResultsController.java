@@ -10,6 +10,7 @@ import com.workshop.service.SearchResultsService;
 import com.workshop.service.UserFeedbackService;
 import com.workshop.service.UserService;
 import com.workshop.service.mail.MailComposer;
+import com.workshop.service.mail.MailSender;
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -32,6 +34,7 @@ import java.util.List;
 @Controller
 public class ResultsController {
 
+    public static final String EMAIL_SUBJECT = "MyBuzz";
     @Autowired
     UserFeedbackService userFeedbackService;
 
@@ -43,6 +46,9 @@ public class ResultsController {
 
     @Autowired
     private MailComposer mailComposer;
+
+    @Autowired
+    private MailSender mailSender;
 
     @RequestMapping(value = "/results/view", method = RequestMethod.GET)
     public ModelAndView viewResultsTable(@Valid @ModelAttribute("resultsId") int resultsId) {
@@ -84,8 +90,25 @@ public class ResultsController {
     @ResponseBody
     public String previewMail(@Valid @ModelAttribute("resultsId") int resultsId) throws IOException, TemplateException {
         List<RelevantNewsView> searchResults = getRelevantNewsViewsById(resultsId);
-        String mailHtml = mailComposer.ComposeMail(searchResults, "MyBuzz", resultsId);
+        String mailHtml = mailComposer.ComposeMail(searchResults, EMAIL_SUBJECT, resultsId);
         return mailHtml;
+    }
+
+    @RequestMapping(value = "/results/sendemail", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<?> sendMail(@Valid @ModelAttribute("resultsId") int resultsId) throws IOException, TemplateException {
+        List<RelevantNewsView> searchResults = getRelevantNewsViewsById(resultsId);
+        String mailHtml = mailComposer.ComposeMail(searchResults, "MyBuzz", resultsId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());
+
+        try {
+            mailSender.sendMail("mybuzzworkshop@gmail.com", user.getEmail(), EMAIL_SUBJECT, mailHtml);
+        } catch (MessagingException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>("Email was sent successfully!",HttpStatus.OK);
     }
 
     private List<RelevantNewsView> getRelevantNewsViewsById(@Valid @ModelAttribute("resultsId") int resultsId) {

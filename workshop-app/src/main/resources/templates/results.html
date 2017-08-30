@@ -22,13 +22,16 @@
     $(document).ready(function () {
         $('#results').DataTable();
 
-        $("#feedbackForm").submit(function (e) {
+        $("#sendMailForm").submit(function (e) {
             $.ajax({
                 type: "POST",
-                url: "/results/feedback",
-                data: $("#feedbackForm").serialize(),
+                url: "/results/sendemail",
+                data: $("#sendMailForm").serialize(),
                 success: function (response) {
-                    alert(response + "\nThank you for your feedback!");
+                    alert("Success, " + response);
+                },
+                error: function () {
+                    alert("Error, Email was not sent.");
                 }
             });
             e.preventDefault();
@@ -48,9 +51,18 @@
     <br>
     <br>
     <div class="row" style="padding-bottom:2em;" th:if="${!results.isEmpty() && isAdmin}">
-        <form th:action="@{/results/view/mail}" method="get">
+        <form class="form-inline col-md-10 row" id="sendMailForm">
             <input type="hidden" name="resultsId" th:value="${results[0].id}">
-            <button type="button" class="btn btn-primary btn-md col-md-2 col-md-offset-10" type="Submit">Mail Preview
+            <div class="input-group col-md-8 col-md-pull-2">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input id="email" type="email" class="form-control" name="email" placeholder="Email" required>
+            </div>
+            <button type="submit" class="btn btn-default col-md-2 col-md-push-8">Send</button>
+        </form>
+
+        <form class="col-md-2" th:action="@{/results/view/mail}" method="get">
+            <input type="hidden" name="resultsId" th:value="${results[0].id}">
+            <button type="button" class="btn btn-primary btn-md btn-block" type="Submit">Mail Preview
             </button>
         </form>
     </div>
