@@ -36,4 +36,13 @@ public class UserServiceImpl implements UserService{
 		userRepository.save(user);
 	}
 
+	@Override
+	public boolean isAdminByEMail(String email) {
+		User user = userRepository.findByEmail(email);
+		return user.getRoles().stream()
+				.map(role -> role.getRole())
+				.filter(r -> r.equalsIgnoreCase("ADMIN"))
+				.count() > 0;
+	}
+
 }

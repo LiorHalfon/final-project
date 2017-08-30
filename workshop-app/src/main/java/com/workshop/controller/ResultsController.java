@@ -9,6 +9,8 @@ import com.workshop.search.RelevantNewsView;
 import com.workshop.service.SearchResultsService;
 import com.workshop.service.UserFeedbackService;
 import com.workshop.service.UserService;
+import com.workshop.service.mail.MailComposer;
+import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,17 +41,19 @@ public class ResultsController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MailComposer mailComposer;
+
     @RequestMapping(value = "/results/view", method = RequestMethod.GET)
-    public ModelAndView  viewResultsTable(@Valid @ModelAttribute("resultsId") int resultsId) {
+    public ModelAndView viewResultsTable(@Valid @ModelAttribute("resultsId") int resultsId) {
         ModelAndView modelAndView = new ModelAndView();
 
-        SearchResults searchResults = searchResultsService.getResultsByResultsId(resultsId);
-
-        Type listType = new TypeToken<ArrayList<RelevantNewsView>>(){}.getType();
-        Gson gson = new Gson();
-        List<RelevantNewsView> resultView = gson.fromJson(searchResults.getResults(), listType);
+        List<RelevantNewsView> resultView = getRelevantNewsViewsById(resultsId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = userService.isAdminByEMail(auth.getName());
 
         modelAndView.addObject("results", resultView);
+        modelAndView.addObject("isAdmin", isAdmin);
         modelAndView.setViewName("results");
         return modelAndView;
     }
@@ -60,22 +65,35 @@ public class ResultsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
         userFeedbackService.sendFeedback(user, UserFeedback.ActivityType.valueOf(activityType), url);
-        return new ResponseEntity("Got " +activityType ,HttpStatus.OK);
+        return new ResponseEntity("Got " + activityType, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/results/view/article", method = RequestMethod.GET)
-    public ModelAndView  viewArticle(@Valid @ModelAttribute("resultsId") int resultId,
-                                     @Valid @ModelAttribute("index") int index) {
+    public ModelAndView viewArticle(@Valid @ModelAttribute("resultsId") int resultsId,
+                                    @Valid @ModelAttribute("index") int index) {
         ModelAndView modelAndView = new ModelAndView();
 
-        SearchResults searchResults = searchResultsService.getResultsByResultsId(resultId);
-
-        Type listType = new TypeToken<ArrayList<RelevantNewsView>>(){}.getType();
-        Gson gson = new Gson();
-        List<RelevantNewsView> resultView = gson.fromJson(searchResults.getResults(), listType);
+        List<RelevantNewsView> resultView = getRelevantNewsViewsById(resultsId);
 
         modelAndView.addObject("article", resultView.get(index));
         modelAndView.setViewName("article");
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/results/view/mail", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String previewMail(@Valid @ModelAttribute("resultsId") int resultsId) throws IOException, TemplateException {
+        List<RelevantNewsView> searchResults = getRelevantNewsViewsById(resultsId);
+        String mailHtml = mailComposer.ComposeMail(searchResults, "MyBuzz", resultsId);
+        return mailHtml;
+    }
+
+    private List<RelevantNewsView> getRelevantNewsViewsById(@Valid @ModelAttribute("resultsId") int resultsId) {
+        SearchResults searchResults = searchResultsService.getResultsByResultsId(resultsId);
+
+        Type listType = new TypeToken<ArrayList<RelevantNewsView>>() {
+        }.getType();
+        Gson gson = new Gson();
+        return gson.fromJson(searchResults.getResults(), listType);
     }
 }
