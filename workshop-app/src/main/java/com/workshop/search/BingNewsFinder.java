@@ -10,6 +10,7 @@ import com.workshop.bing.model.search.results.result.BingNewsResult;
 import com.workshop.model.User;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class BingNewsFinder implements NewsFinder {
     }
 
     @Override
-        public void Start() throws Exception {
+        public void Start() throws MalformedURLException{
         while (!_queries.isEmpty())
         {
             String query = _queries.remove(0);
@@ -57,16 +58,15 @@ public class BingNewsFinder implements NewsFinder {
 
             for (BingNewsResult resultItem : resultsList) {
                 URL url = new URL(resultItem.getUrl());
-                TaxonomyClassifications taxonomyClassifications = _textAnalyser.ClassifyUrlByTaxonomy(url);
-                if(_resultFilter.isUrlRelevant(url,taxonomyClassifications)){
-                    AddResultToRelevantNews(url, taxonomyClassifications);
+                try {
+                    TaxonomyClassifications taxonomyClassifications = _textAnalyser.ClassifyUrlByTaxonomy(url);
+                    if(_resultFilter.isUrlRelevant(url,taxonomyClassifications)){
+                        AddResultToRelevantNews(url, taxonomyClassifications);
+                    }
+                } catch (TextAPIException e) {
+                    e.printStackTrace();
+                    _textAnalyser.ConnectToServerWithNewCredentials();
                 }
-
-                //Wait, so we won't exceed hit rate limit
-//                try {
-//                    Thread.sleep(100);
-//                } catch (InterruptedException e) {
-//                }
             }
         }
         isSearchFinished = true;

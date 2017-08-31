@@ -6,15 +6,36 @@ import com.aylien.textapi.parameters.*;
 import com.aylien.textapi.responses.*;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 public class TextAnalyser {
-    private final String _appId = "b5c4e688";
-    private final String _applicationKey = "5d5fb206e2803c3a7e117f596c0fbe79";
+
+    private int credentialsCounter = 0;
     private final int _tweetThreshold = 140;
     private TextAPIClient _client;
+    private CircularList<AppCredentials> appCredentialsCircularList = new CircularList<>();
+
+    class CircularList<E> extends ArrayList<E> {
+        @Override
+        public E get(int index) {
+            return super.get(index % size());
+        }
+    }
+
+    class AppCredentials{
+        public String appId;
+        public String applicationKey;
+
+        public AppCredentials(String appId, String applicationKey) {
+            this.appId = appId;
+            this.applicationKey = applicationKey;
+        }
+    }
 
     public TextAnalyser() {
-        _client = new TextAPIClient(_appId, _applicationKey);
+        appCredentialsCircularList.add(new AppCredentials("b5c4e688", "5d5fb206e2803c3a7e117f596c0fbe79"));
+        appCredentialsCircularList.add(new AppCredentials("01593c52", "c8e743fe44d4451398d45e65bf559c8a"));
+        ConnectToServerWithNewCredentials();
     }
 
     public Classifications ClassifyUrl(URL url) throws TextAPIException {
@@ -57,4 +78,9 @@ public class TextAnalyser {
     }
 
 
+    public void ConnectToServerWithNewCredentials() {
+        AppCredentials credentials = appCredentialsCircularList.get(credentialsCounter);
+        _client = new TextAPIClient(credentials.appId, credentials.applicationKey);
+        credentialsCounter++;
+    }
 }
