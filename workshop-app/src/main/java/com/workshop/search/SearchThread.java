@@ -98,8 +98,8 @@ public class SearchThread extends Thread {
         }
 
         try {
-            String html = mailComposer.ComposeSearchDoneMail("MyBuzz Search Completed", resultsId);
-            mailSender.sendMail("mybuzzworkshop2@gmail.com", user.getEmail(), queryValueParam + " Search Completed", html);
+            String html = mailComposer.ComposeSearchDoneMail("MyBuzz Search Completed", resultsId, user.getEmail());
+            mailSender.sendMail("mybuzzworkshop@gmail.com", userService.getAdminEmail(), queryValueParam + " Search Completed", html);
         } catch (Exception e) {
             e.printStackTrace();
         }

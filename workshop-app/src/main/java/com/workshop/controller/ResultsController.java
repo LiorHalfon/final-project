@@ -51,15 +51,17 @@ public class ResultsController {
     private MailSender mailSender;
 
     @RequestMapping(value = "/results/view", method = RequestMethod.GET)
-    public ModelAndView viewResultsTable(@Valid @ModelAttribute("resultsId") int resultsId) {
+    public ModelAndView viewResultsTable(@Valid @ModelAttribute("resultsId") int resultsId,
+                                         @Valid @ModelAttribute("userEmail") String userEmail) {
         ModelAndView modelAndView = new ModelAndView();
 
         List<RelevantNewsView> resultView = getRelevantNewsViewsById(resultsId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        boolean isAdmin = userService.isAdminByEMail(auth.getName());
+        boolean isAdmin = userService.isAdminByEmail(auth.getName());
 
         modelAndView.addObject("results", resultView);
         modelAndView.addObject("isAdmin", isAdmin);
+        modelAndView.addObject("userEmail", userEmail);
         modelAndView.setViewName("results");
         return modelAndView;
     }
@@ -76,12 +78,14 @@ public class ResultsController {
 
     @RequestMapping(value = "/results/view/article", method = RequestMethod.GET)
     public ModelAndView viewArticle(@Valid @ModelAttribute("resultsId") int resultsId,
-                                    @Valid @ModelAttribute("index") int index) {
+                                    @Valid @ModelAttribute("index") int index,
+                                    @Valid @ModelAttribute("userEmail") String userEmail) {
         ModelAndView modelAndView = new ModelAndView();
 
         List<RelevantNewsView> resultView = getRelevantNewsViewsById(resultsId);
 
         modelAndView.addObject("article", resultView.get(index));
+        modelAndView.addObject("userEmail", userEmail);
         modelAndView.setViewName("article");
         return modelAndView;
     }
@@ -96,14 +100,12 @@ public class ResultsController {
 
     @RequestMapping(value = "/results/sendemail", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> sendMail(@Valid @ModelAttribute("resultsId") int resultsId) throws IOException, TemplateException {
+    public ResponseEntity<?> sendMail(@Valid @ModelAttribute("resultsId") int resultsId,
+                                      @Valid @ModelAttribute("userEmail") String userEmail) throws IOException, TemplateException {
         List<RelevantNewsView> searchResults = getRelevantNewsViewsById(resultsId);
         String mailHtml = mailComposer.ComposeMail(searchResults, "MyBuzz", resultsId);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());
-
         try {
-            mailSender.sendMail("mybuzzworkshop2@gmail.com", user.getEmail(), EMAIL_SUBJECT, mailHtml);
+            mailSender.sendMail("mybuzzworkshop@gmail.com", userEmail, EMAIL_SUBJECT, mailHtml);
         } catch (MessagingException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }

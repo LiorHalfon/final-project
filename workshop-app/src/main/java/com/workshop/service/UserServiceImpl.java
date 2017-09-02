@@ -37,12 +37,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isAdminByEMail(String email) {
+    public boolean isAdminByEmail(String email) {
         User user = userRepository.findByEmail(email);
+        return isUserAdmin(user);
+    }
+
+    @Override
+    public String getAdminEmail() {
+        return userRepository.findAll().stream()
+                .filter(user -> isUserAdmin(user))
+                .findFirst()
+                .get()
+                .getEmail();
+    }
+
+    private boolean isUserAdmin(User user)
+    {
         return user.getRoles().stream()
-                .map(role -> role.getRole())
-                .filter(r -> r.equalsIgnoreCase("ADMIN"))
-                .count() > 0;
+                .anyMatch(role -> role.getRole().equalsIgnoreCase("ADMIN"));
     }
 
 }

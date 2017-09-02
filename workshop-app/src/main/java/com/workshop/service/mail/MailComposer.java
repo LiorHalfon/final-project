@@ -20,11 +20,11 @@ public class MailComposer {
     @Autowired
     private FreeMarkerConfigurer freeMarkerConfig;
 
-    public String ComposeSearchDoneMail(String mailTitle, int resultsId) throws IOException, TemplateException {
+    public String ComposeSearchDoneMail(String mailTitle, int resultsId, String userMail) throws IOException, TemplateException {
         String mail = "";
         mail += CompileMailHeader("header.html", mailTitle);
-        mail += CompileTemplateWithResultId("search-done.html", resultsId);
-        mail += CompileTemplateWithResultId("footer.html", resultsId);
+        mail += CompileTemplateWithResultId("search-done.html", resultsId, userMail);
+        mail += CompileTemplateWithResultId("footer.html", resultsId, userMail);
         return mail;
     }
 
@@ -43,7 +43,7 @@ public class MailComposer {
                 mail += CompileArticle("big-article.html", news.get(i));
         }
 
-        mail += CompileTemplateWithResultId("footer.html", resultsId);
+        mail += CompileTemplateWithResultId("footer.html", resultsId, "");
         return mail;
     }
 
@@ -74,10 +74,11 @@ public class MailComposer {
         return processTemplateIntoString(template, model);
     }
 
-    private String CompileTemplateWithResultId(String templateName, int resultsId) throws IOException, TemplateException {
+    private String CompileTemplateWithResultId(String templateName, int resultsId, String userMail) throws IOException, TemplateException {
         Template template = freeMarkerConfig.getConfiguration().getTemplate(templateName);
         Map<String, Object> model = new HashMap<>();
         model.put("resultsId", resultsId);
+        model.put("userEmail", userMail);
         return processTemplateIntoString(template, model);
     }
 }
