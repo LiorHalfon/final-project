@@ -48,7 +48,10 @@ public class BingNewsFinder implements NewsFinder {
             String query = _queries.remove(0);
             BingNewsResponse searchResults = _bingController.searchNews(query);
 
-            //TODO: handle error, so user can know about it. Currently we present "success" message
+            if(searchResults.getError() != null){
+                System.err.println("Bing search error: " + searchResults.getError());
+            }
+
 
             if (searchResults == null){
                 System.err.println("Got empty search results for query: " + query);
