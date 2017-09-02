@@ -9,33 +9,34 @@ import java.util.List;
 
 public class ResultsFilter {
 
-    private final List<String> haveToAppearCategories;
-    private final List<String> cantAppearCategories;
-    private final List<String> blacklistDomains;
+    private final List<String> whiteListCategories;
+    private final List<String> blackListCategories;
+    private final List<String> blackListDomains;
 
-    // haveToAppearCategories and cantAppearCategories are lists of IAB Categories
-    public ResultsFilter(List<String> haveToAppearCategories,
-                         List<String> cantAppearCategories,
-                         List<String> blacklistDomains) {
-        this.haveToAppearCategories = haveToAppearCategories == null ? new ArrayList<>() : haveToAppearCategories;
-        this.cantAppearCategories = cantAppearCategories == null ? new ArrayList<>() :cantAppearCategories;
-        this.blacklistDomains = blacklistDomains == null ? new ArrayList<>() :blacklistDomains;
+    // whiteListCategories and blackListCategories are lists of IAB Categories
+    public ResultsFilter(List<String> whiteListCategories,
+                         List<String> blackListCategories,
+                         List<String> blackListDomains) {
+        this.whiteListCategories = whiteListCategories == null ? new ArrayList<>() : whiteListCategories;
+        this.blackListCategories = blackListCategories == null ? new ArrayList<>() : blackListCategories;
+        this.blackListDomains = blackListDomains == null ? new ArrayList<>() : blackListDomains;
     }
 
     public boolean isUrlRelevant(URL url, TaxonomyClassifications taxonomyClassifications) {
-        for (String blackDomain : blacklistDomains)
+        for (String blackDomain : blackListDomains)
             if(url.toString().toLowerCase().contains(blackDomain.toLowerCase()))
                 return false;
 
-        List<String> categoriesLeftToAppear = new ArrayList<>(haveToAppearCategories);
-
+        boolean isAnyWLCategoryAppeared = false;
         for (TaxonomyCategory c: taxonomyClassifications.getCategories()) {
-            categoriesLeftToAppear.remove(c.getId());
-            if (c.isConfident() && cantAppearCategories.contains(c.getId())) {
+            if(whiteListCategories.contains(c.getId()))
+                isAnyWLCategoryAppeared = true;
+
+            if (c.isConfident() && blackListCategories.contains(c.getId())) {
                 return false;
             }
         }
 
-        return categoriesLeftToAppear.size() == 0;
+        return isAnyWLCategoryAppeared;
     }
 }
