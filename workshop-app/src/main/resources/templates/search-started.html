@@ -4,26 +4,28 @@
 
 <head>
     <title>Search Started</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/search-started.css}" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-<div class="container">
-
-    <form th:action="@{/logout}" method="get">
-        <button class="btn btn-md btn-danger btn-block" name="registration"
-                type="Submit">Logout</button>
-    </form>
-    <br>
-    <br>
-    <h1 class="text-center">Search Started!</h1>
-    <h2 class="text-center">You will be notified via email once the results return.</h2>
-    <br>
-    <div style="text-align:center;">
-        <a href="/home" type="button" class="btn btn-primary">Return</a>
+    <a id="logoff" class="standalone-button" href="/logout">
+        <span class="glyphicon glyphicon-log-out"></span>
+    </a>
+    <a id="back-home" class="standalone-button" href="/home">
+        <span class="glyphicon glyphicon-home"></span>
+    </a>
+    <div class="container">
+        <div id="panel" class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Started!</h3>
+            </div>
+            <div class="panel-body">
+                You will soon receive an email with the results digest.
+                Thanks for using MyBuzz!
+            </div>
+        </div>
     </div>
-</div>
 </body>
 </html>

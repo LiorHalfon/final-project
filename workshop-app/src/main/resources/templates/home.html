@@ -18,7 +18,7 @@
             numberDisplayed: 0,
             onDropdownHidden: function (e) {
 			    debugger;
-                $('#hiddenChoices').val($('#filter').val());
+                $('#hiddenChoices').val($('#filter').val().join(','));
             }
 		});
 	});
@@ -34,7 +34,7 @@
 			<div class="col-md-12">
 				<form class="form-horizontal" th:action="@{/home/search}" method="get">
 					<div class="input-group" id="adv-search">
-						<input type="text" name="queryValue" class="form-control" placeholder="Search" />
+						<input type="text" name="queryValue" required="true" class="form-control" placeholder="Search" />
 						<div class="input-group-btn">
 							<div class="btn-group" role="group">
 								<input type="hidden" name="haveToAppear" id="hiddenChoices" value="" />

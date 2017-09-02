@@ -103,7 +103,7 @@ public class ResultsController {
         User user = userService.findUserByEmail(auth.getName());
 
         try {
-            mailSender.sendMail("mybuzzworkshop@gmail.com", user.getEmail(), EMAIL_SUBJECT, mailHtml);
+            mailSender.sendMail("mybuzzworkshop2@gmail.com", user.getEmail(), EMAIL_SUBJECT, mailHtml);
         } catch (MessagingException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }

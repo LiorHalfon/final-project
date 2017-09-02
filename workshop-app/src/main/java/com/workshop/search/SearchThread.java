@@ -53,7 +53,7 @@ public class SearchThread extends Thread {
     public void run() {
         ArrayList<String> blackListDomains = new ArrayList<>();
         List<RelevantNews> results;
-        Boolean useRealWebSearch = false;
+        boolean testing = true;
 
         String[] data = queryValueParam.split(",");
         ArrayList<String> queries = new ArrayList<>(Arrays.asList(data));
@@ -68,7 +68,7 @@ public class SearchThread extends Thread {
             }
         }
 
-        if(useRealWebSearch) {
+        if(testing == false) {
             NewsFinder newsFinder = new BingNewsFinder();
             newsFinder.init(haveToAppear, cantAppear, blackListDomains, queries, user);
             try {
@@ -90,6 +90,7 @@ public class SearchThread extends Thread {
 
         Gson gson = new Gson();
         String json = gson.toJson(resultView);
+
         try {
             searchResultsService.saveResults(resultsId, json);
         } catch (Exception e) {
@@ -98,7 +99,7 @@ public class SearchThread extends Thread {
 
         try {
             String html = mailComposer.ComposeSearchDoneMail("MyBuzz Search Completed", resultsId);
-            mailSender.sendMail("mybuzzworkshop@gmail.com", user.getEmail(), queryValueParam + " Search Completed", html);
+            mailSender.sendMail("mybuzzworkshop2@gmail.com", user.getEmail(), queryValueParam + " Search Completed", html);
         } catch (Exception e) {
             e.printStackTrace();
         }
