@@ -5,7 +5,7 @@
 <head>
     <title>Results Page</title>
 
-    <!--<link rel="stylesheet" type="text/css" th:href="@{/css/results.css}" />-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/results.css}" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">
 
@@ -40,33 +40,29 @@
     });
 </script>
 <div class="container">
-
-    <br>
-    <div class="row">
-        <form th:action="@{/logout}" method="get">
-            <button class="btn btn-md btn-danger btn-block" name="registration"
-                    type="Submit">Logout
-            </button>
-        </form>
-    </div>
-    <br>
+    <a id="logoff" class="standalone-button" href="/logout">
+        <span class="glyphicon glyphicon-log-out"></span>
+    </a>
+    <a id="back-home" class="standalone-button" href="/home">
+        <span class="glyphicon glyphicon-home"></span>
+    </a>
     <br>
     <div class="row" style="padding-bottom:2em;" th:if="${!results.isEmpty() && isAdmin}">
-        <form class="form-inline col-md-2 col-md-offset-8 row" id="sendMailForm">
+        <form class="form-inline col-md-2 row" id="sendMailForm">
             <input type="hidden" name="resultsId" th:value="${results[0].id}">
             <input type="hidden" name="userEmail" th:value="${userEmail}">
-            <button type="submit" class="btn btn-success btn-block">Send Mail</button>
+            <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-envelope"></span>Send Mail</button>
         </form>
 
         <form class="col-md-2" th:action="@{/results/view/mail}" method="get">
             <input type="hidden" name="resultsId" th:value="${results[0].id}">
-            <button type="button" class="btn btn-primary btn-md btn-block" type="Submit">Mail Preview
+            <button type="button" class="btn btn-primary btn-md btn-block" type="Submit"><span class="glyphicon glyphicon-eye-open"></span>Mail Preview
             </button>
         </form>
     </div>
     <div class="row">
         <div class="table-responsive">
-            <table id="results" class="table table-bordered table-striped table-hover">
+            <table id="results" class="table table-bordered">
                 <thead>
                 <tr>
                     <th>#</th>
