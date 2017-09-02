@@ -1,19 +1,39 @@
-.wrapper {    
+body {
+  background: url("/images/login_background.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+}
+
+.container {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
+
+.wrapper {
 	margin-top: 80px;
 	margin-bottom: 20px;
 }
 
 .form-signin {
   max-width: 420px;
-  padding: 30px 38px 66px;
+  padding: 30px 38px 30px 38px;
   margin: 0 auto;
-  background-color: #eee;
-  border: 3px dotted rgba(0,0,0,0.1);  
-  }
+  background-color: rgba(10,10,10,0.7);
+  border: 3px rgba(0,0,0,0.1);
+  width: 100%;
+  border-radius: 5px;
+}
 
 .form-signin-heading {
   text-align:center;
   margin-bottom: 30px;
+  color: white;
 }
 
 .form-control {

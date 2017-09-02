@@ -98,7 +98,11 @@ public class SearchThread extends Thread {
 
         Gson gson = new Gson();
         String json = gson.toJson(resultView);
-        searchResultsService.saveResults(resultsId, json);
+        try {
+            searchResultsService.saveResults(resultsId, json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         try {
             String html = mailComposer.ComposeSearchDoneMail("MyBuzz Search Completed", resultsId);
