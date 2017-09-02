@@ -43,28 +43,22 @@ public class SearchThread extends Thread {
     @Autowired
     private MailComposer mailComposer;
 
-    private String haveToAppearParam;
-    private String cantAppearParam;
+    private List<String> haveToAppear;
+    private List<String> cantAppear;
     private String queryValueParam;
     private User user;
     private int resultsId;
 
     @Override
     public void run() {
+        ArrayList<String> blackListDomains = new ArrayList<>();
+        List<RelevantNews> results;
+        Boolean useRealWebSearch = false;
 
-        String[] data = haveToAppearParam.split(",");
-        ArrayList<String> haveToAppear = new ArrayList<>(Arrays.asList(data));
-        haveToAppear.remove("");
-
-        data = cantAppearParam.split(",");
-        ArrayList<String> cantAppear = new ArrayList<>(Arrays.asList(data));
-        cantAppear.remove("");
-
-        data = queryValueParam.split(",");
+        String[] data = queryValueParam.split(",");
         ArrayList<String> queries = new ArrayList<>(Arrays.asList(data));
         queries.remove("");
 
-        ArrayList<String> blackListDomains = new ArrayList<>();
         List<UserFeedback> userFB = userFeedbackService.getUserFeedbacks(user, UserFeedback.ActivityType.BLOCK_DOMAIN);
         if (userFB != null) {
             for (UserFeedback activity : userFB) {
@@ -73,19 +67,17 @@ public class SearchThread extends Thread {
                 }
             }
         }
-        List<RelevantNews> results;
-        Boolean useRealWebSearch = false;
 
         if(useRealWebSearch) {
             NewsFinder newsFinder = new BingNewsFinder();
-            newsFinder.Init(haveToAppear, cantAppear, blackListDomains, queries, user);
+            newsFinder.init(haveToAppear, cantAppear, blackListDomains, queries, user);
             try {
-                newsFinder.Start();
+                newsFinder.start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            results = newsFinder.GetResults();
+            results = newsFinder.getResults();
         }
         else{
             results = GetMockResults();
@@ -112,12 +104,12 @@ public class SearchThread extends Thread {
         }
     }
 
-    public void setHaveToAppearParam(String haveToAppearParam) {
-        this.haveToAppearParam = haveToAppearParam;
+    public void setHaveToAppearParam(List<String> haveToAppearParam) {
+        this.haveToAppear = haveToAppearParam;
     }
 
-    public void setCantAppearParam(String cantAppearParam) {
-        this.cantAppearParam = cantAppearParam;
+    public void setCantAppearParam(List<String> cantAppearParam) {
+        this.cantAppear = cantAppearParam;
     }
 
     public void setQueryValueParam(String queryValueParam) {

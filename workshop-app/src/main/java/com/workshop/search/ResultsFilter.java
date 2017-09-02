@@ -5,29 +5,29 @@ import com.aylien.textapi.responses.TaxonomyClassifications;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ResultsFilter {
 
-    private final ArrayList<String> haveToAppearCategories;
-    private final ArrayList<String> cantAppearCategories;
-    private final ArrayList<String> blacklistDomains;
+    private final List<String> haveToAppearCategories;
+    private final List<String> cantAppearCategories;
+    private final List<String> blacklistDomains;
 
     // haveToAppearCategories and cantAppearCategories are lists of IAB Categories
-    public ResultsFilter(ArrayList<String> haveToAppearCategories,
-                         ArrayList<String> cantAppearCategories,
-                         ArrayList<String> blacklistDomains) {
-        this.haveToAppearCategories = haveToAppearCategories == null ? new ArrayList<>() :haveToAppearCategories;
+    public ResultsFilter(List<String> haveToAppearCategories,
+                         List<String> cantAppearCategories,
+                         List<String> blacklistDomains) {
+        this.haveToAppearCategories = haveToAppearCategories == null ? new ArrayList<>() : haveToAppearCategories;
         this.cantAppearCategories = cantAppearCategories == null ? new ArrayList<>() :cantAppearCategories;
         this.blacklistDomains = blacklistDomains == null ? new ArrayList<>() :blacklistDomains;
     }
 
-    public boolean isUrlRelevant(URL url, TaxonomyClassifications taxonomyClassifications)
-    {
+    public boolean isUrlRelevant(URL url, TaxonomyClassifications taxonomyClassifications) {
         for (String blackDomain : blacklistDomains)
             if(url.toString().toLowerCase().contains(blackDomain.toLowerCase()))
                 return false;
 
-        ArrayList categoriesLeftToAppear = (ArrayList)haveToAppearCategories.clone();
+        List<String> categoriesLeftToAppear = new ArrayList<>(haveToAppearCategories);
 
         for (TaxonomyCategory c: taxonomyClassifications.getCategories()) {
             categoriesLeftToAppear.remove(c.getId());
@@ -36,9 +36,6 @@ public class ResultsFilter {
             }
         }
 
-        if (categoriesLeftToAppear.size() == 0)
-            return true;
-
-        return false;
+        return categoriesLeftToAppear.size() == 0;
     }
 }

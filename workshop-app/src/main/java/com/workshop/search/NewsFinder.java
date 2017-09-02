@@ -2,19 +2,18 @@ package com.workshop.search;
 
 import com.workshop.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface NewsFinder {
 
-    void Init(ArrayList<String> haveToAppearCategories,
-              ArrayList<String> cantAppearCategories,
-              ArrayList<String> blacklistDomains,
-              ArrayList<String> queries,
+    void init(List<String> haveToAppearCategories,
+              List<String> cantAppearCategories,
+              List<String> blacklistDomains,
+              List<String> queries,
               User user);
-    void Start() throws Exception;
+    void start() throws Exception;
 
-    List<RelevantNews> GetResults();
-    Boolean IsSearchFinished();
-    String PrintResults();
+    List<RelevantNews> getResults();
+    Boolean isSearchFinished();
+    String printResults();
 }

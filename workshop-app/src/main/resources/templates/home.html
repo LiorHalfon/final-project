@@ -6,64 +6,70 @@
 <title>Main Page</title>
 <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$('.multiselect-ui').multiselect({
+			includeSelectAllOption: true,
+            nonSelectedText: "Select Categories",
+            numberDisplayed: 0,
+            onDropdownHidden: function (e) {
+			    debugger;
+                $('#hiddenChoices').val($('#filter').val());
+            }
+		});
+	});
+</script>
 </head>
 
 <body>
+	<a id="logoff" href="/logout">
+		<span class="glyphicon glyphicon-log-out"></span>
+	</a>
 	<div class="container">
-	
-		<form th:action="@{/logout}" method="get">
-			<button class="btn btn-md btn-danger btn-block" name="registration"
-				type="Submit">Logout</button>
-		</form>
-		<br>
-		<br>
-		<h2>Search</h2>
-
-		<form class="form-horizontal" th:action="@{/home/search}" method="get">
-			<div class="form-group form-group-lg">
-				<label class="col-sm-2 control-label" for="lg">Search input</label>
-				<div class="col-sm-10">
-					<input name="queryValue" class="form-control" type="text" id="lg">
-				</div>
+		<div class="searchRow">
+			<div class="col-md-12">
+				<form class="form-horizontal" th:action="@{/home/search}" method="get">
+					<div class="input-group" id="adv-search">
+						<input type="text" name="queryValue" class="form-control" placeholder="Search" />
+						<div class="input-group-btn">
+							<div class="btn-group" role="group">
+								<input type="hidden" name="haveToAppear" id="hiddenChoices" value="" />
+								<select id="filter" multiple="multiple" class="multiselect-ui form-control">
+									<option value="IAB1">Arts & Entertainment</option>
+									<option value="IAB2">Automotive</option>
+									<option value="IAB3">Business</option>
+									<option value="IAB4">Careers</option>
+									<option value="IAB5">Education</option>
+									<option value="IAB6">Family & Parenting</option>
+									<option value="IAB7">Health & Fitness</option>
+									<option value="IAB8">Food & Drink</option>
+									<option value="IAB9">Hobbies & Interests</option>
+									<option value="IAB10">Home & Garden</option>
+									<option value="IAB11">Law, Gov’t & Politics</option>
+									<option value="IAB12">News</option>
+									<option value="IAB13">Personal Finance</option>
+									<option value="IAB14">Society</option>
+									<option value="IAB15">Science</option>
+									<option value="IAB16">Pets</option>
+									<option value="IAB17">Sports</option>
+									<option value="IAB18">Style & Fashion</option>
+									<option value="IAB19">Technology & Computing</option>
+									<option value="IAB20">Travel</option>
+									<option value="IAB21">Real Estate</option>
+									<option value="IAB22">Shopping</option>
+									<option value="IAB23">Religion & Spirituality</option>
+								</select>
+								<button type="Submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+							</div>
+						</div>
+					</div>
+				</form>
 			</div>
-			<div class="form-group form-group-sm">
-				<label class="col-sm-2 control-label" for="sm1">White List Categories(IAB ids)</label>
-				<div class="col-sm-10">
-					<input name="haveToAppear" class="form-control" type="text" id="sm1">
-				</div>
-			</div>
-			<div class="form-group form-group-sm">
-				<label class="col-sm-2 control-label" for="sm2">Black List Categories(IAB ids)</label>
-				<div class="col-sm-10">
-					<input name="cantAppear" class="form-control" type="text" id="sm2">
-				</div>
-			</div>
-			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-		</form>
-
-		<!--<form th:action="@{/home/search}" method="get" class="form-inline my-5 my-lg-0" _lpchecked="1">-->
-			<!--<input name="haveToAppear" class="form-control mr-sm-2" type="text" placeholder="Have to Appear (IAB ids)">-->
-			<!--<br>-->
-			<!--<input name="cantAppear" class="form-control mr-sm-2" type="text" placeholder="Must not appear (IAB ids)">-->
-			<!--<br>-->
-			<!--<input name="queryValue" class="form-control mr-sm-2" type="text" placeholder="Search keywords">-->
-			<!--<br>-->
-			<!--<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
-		<!--</form>-->
-
-		<!--<div class="panel-group" style="margin-top:40px">-->
-			<!--<div class="panel panel-primary">-->
-				<!--<div class="panel-heading">-->
-					<!--<span th:utext="${userName}"></span>-->
-				<!--</div>-->
-				<!--<div class="panel-body">-->
-				<!--</div>-->
-				<!--<p class="admin-message-text text-center" th:utext="${adminMessage}"></p>-->
-			<!--</div>-->
-		<!--</div>-->
-		<!---->
+		</div>
 	</div>
 </body>
 </html>

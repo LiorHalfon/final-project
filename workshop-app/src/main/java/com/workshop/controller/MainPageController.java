@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by ndayan on 10/06/2017.
@@ -57,8 +59,8 @@ public class MainPageController {
         int resultsId = searchResultsService.getNextResultsId(user);
 
         searchThread.setQueryValueParam(queryValueParam);
-        searchThread.setHaveToAppearParam(haveToAppearParam);
-        searchThread.setCantAppearParam(cantAppearParam);
+        searchThread.setHaveToAppearParam(getListFromCommaSeperatedString(haveToAppearParam));
+        searchThread.setCantAppearParam(getListFromCommaSeperatedString(cantAppearParam));
         searchThread.setUser(user);
         searchThread.setResultsId(resultsId);
 
@@ -67,5 +69,12 @@ public class MainPageController {
         modelAndView.setViewName("search-started");
 
         return modelAndView;
+    }
+
+    private static List<String> getListFromCommaSeperatedString(String input) {
+        if (input == null) {
+            return null;
+        }
+        return Arrays.asList(input.split(","));
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 
 public class BingNewsFinder implements NewsFinder {
 
-    private ArrayList<String> _queries;
+    private List<String> _queries;
     private User _user;
     private TextAnalyser _textAnalyser;
     private BingController _bingController;
@@ -26,10 +26,10 @@ public class BingNewsFinder implements NewsFinder {
     private Boolean isSearchFinished = false;
 
     @Override
-    public void Init(ArrayList<String> haveToAppearCategories,
-                     ArrayList<String> cantAppearCategories,
-                     ArrayList<String> blacklistDomains,
-                     ArrayList<String> queries,
+    public void init(List<String> haveToAppearCategories,
+                     List<String> cantAppearCategories,
+                     List<String> blacklistDomains,
+                     List<String> queries,
                      User user) {
         _queries=queries;
         _user = user;
@@ -42,7 +42,7 @@ public class BingNewsFinder implements NewsFinder {
     }
 
     @Override
-        public void Start() throws MalformedURLException{
+        public void start() throws MalformedURLException{
         while (!_queries.isEmpty())
         {
             String query = _queries.remove(0);
@@ -72,11 +72,11 @@ public class BingNewsFinder implements NewsFinder {
         isSearchFinished = true;
     }
 
-    public List<RelevantNews> GetResults() {return _relevantNewsList;}
+    public List<RelevantNews> getResults() {return _relevantNewsList;}
 
-    public Boolean IsSearchFinished() {return isSearchFinished;}
+    public Boolean isSearchFinished() {return isSearchFinished;}
 
-    public String PrintResults(){
+    public String printResults(){
         String output = "";
         for (RelevantNews news: _relevantNewsList) {
             output += "\n";
