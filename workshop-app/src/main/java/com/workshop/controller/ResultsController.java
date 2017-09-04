@@ -59,9 +59,11 @@ public class ResultsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean isAdmin = userService.isAdminByEmail(auth.getName());
 
+        String resultJson = new Gson().toJson(resultView);
         modelAndView.addObject("results", resultView);
         modelAndView.addObject("isAdmin", isAdmin);
         modelAndView.addObject("userEmail", userEmail);
+        modelAndView.addObject("resultsJson", resultJson);
         modelAndView.setViewName("results");
         return modelAndView;
     }
