@@ -4,68 +4,85 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${article.title}"></title>
-
+    <link rel="stylesheet" type="text/css" th:href="@{/css/article.css}" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-<script>
-    $(document).ready(function() {
-        $("#feedbackForm").submit(function (e) {
-            $.ajax({
-                type: "POST",
-                url: "/results/feedback",
-                data: $("#feedbackForm").serialize(),
-                success: function (response) {
-                    alert(response + "\nThank you for your feedback!");
+    <script>
+        $(document).ready(function() {
+            $(".feedback-button").click(function (e) {
+                var activityType = "THUMBS_UP";
+                if (e.target && e.target.classList.contains("thumbs-down")) {
+                    activityType = "THUMBS_DOWN";
+                } else if (e.target && e.target.classList.contains("block-domain")) {
+                    activityType = "BLOCK_DOMAIN";
                 }
-            });
-            e.preventDefault();
-        });
-    } );
-</script>
-<div class="container">
-    <img class="img-responsive" style="max-width: 100%; max-height: 80%" th:src="${article.imageUrl}" alt=""/>
-    <br>
-    <h1 th:text="${article.title}"></h1>
-    <p><span style="color: #808080;" th:text="${article.domain}"></span></p>
-    <h4><img class="gr-progress" th:src="${article.sentimentImageUrl}" alt="" width="32" height="32" />&nbsp;&nbsp;<span th:text="${#numbers.formatDecimal(article.sentiment.polarityConfidence * 100,2,0)}"></span>% Confidence</h4>
-    <p th:text="${article.summary}"></p>
-    <br>
-    <h4>Categories:</h4>
-    <ul>
-        <li th:each="item : ${article.classifications}" th:text="${item}">Classification</li>
-    </ul>
-    <br>
-    <br>
-    <div class="row">
-        <div class="col-xs-12">
-            <form th:action="@{/results/view}" method="get">
-                <input type="hidden" name="resultsId" th:value="${article.id}">
-                <input type="hidden" name="userEmail" th:value="${userEmail}">
-                <button class="col-md-1 btn btn-md btn-warning"
-                        type="Submit">Go Back</button>
-            </form>
-            <a th:href="${article.url}" class="col-md-2 col-md-offset-1 btn btn-md btn-primary">Go To Source Website</a>
-            <form id="feedbackForm" class="col-md-4 col-md-offset-1">
-                <select name="activityType">
-                    <option value="BLOCK_DOMAIN">Block Domain</option>
-                    <option value="THUMBS_UP">Like</option>
-                    <option value="THUMBS_DOWN">Dislike</option>
-                </select>
 
-                <input type="hidden" name="url" th:value="${article.url}">
-                <button class="btn btn-md btn-danger" name="feedback"
-                        type="Submit">Feedback</button>
-            </form>
+                $.ajax({
+                    type: "POST",
+                    url: "/results/feedback",
+                    data: {
+                        url: $("#articleUrl").val(),
+                        activityType: activityType
+
+                    },
+                    success: function (response) {
+                        alert(response + "\nThank you for your feedback!");
+                    }
+                });
+                e.preventDefault();
+            });
+        } );
+    </script>
+    <div class="container">
+        <a id="logoff" class="standalone-button" href="/logout">
+            <span class="glyphicon glyphicon-log-out"></span>
+        </a>
+        <a id="back-home" class="standalone-button" href="/home">
+            <span class="glyphicon glyphicon-home"></span>
+        </a>
+
+        <div id="articleContainer">
+            <img class="img-responsive" style="max-width: 100%; max-height: 80%" th:src="${article.imageUrl}" alt=""/>
+            <h1 th:text="${article.title}"></h1>
+            <p><span style="color: #808080;" th:text="${article.domain}"></span></p>
+            <h4><img class="sentiment gr-progress" th:classappend="${article.sentiment.polarity}" th:src="${article.sentimentImageUrl}" alt="" width="32" height="32" />&nbsp;&nbsp;<span th:text="${#numbers.formatDecimal(article.sentiment.polarityConfidence * 100,2,0)}"></span>% Confidence</h4>
+            <p th:text="${article.summary}"></p>
+            <br>
+            <h4>Categories:</h4>
+            <ul>
+                <li th:each="item : ${article.classifications}" th:text="${item}">Classification</li>
+            </ul>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-xs-12">
+                    <form th:action="@{/results/view}" method="get">
+                        <input type="hidden" name="resultsId" th:value="${article.id}">
+                        <input type="hidden" name="userEmail" th:value="${userEmail}">
+                        <button class="col-md-1 btn btn-md btn-warning"
+                                type="Submit">Go Back</button>
+                    </form>
+                    <a th:href="${article.url}" class="col-md-2 col-md-offset-1 btn btn-md btn-primary">Go To Source Website</a>
+
+                        <input id="articleUrl" type="hidden" name="url" th:value="${article.url}">
+                        <div class="btn-group col-md-offset-1" role="group">
+                            <button id="thumbs-up" type="button" class="thumbs-up feedback-button btn btn-md btn-default">
+                                <span class="glyphicon glyphicon-thumbs-up thumbs-up" aria-hidden="true"></span>
+                            </button>
+                            <button id="thumbs-down" type="button" class="thumbs-down feedback-button btn btn-md btn-default">
+                                <span class="glyphicon glyphicon-thumbs-down thumbs-down" aria-hidden="true"></span>
+                            </button>
+                            <button id="block-domain" type="button" class="block-domain feedback-button btn btn-md btn-default">
+                                <span class="glyphicon glyphicon-ban-circle block-domain" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                </div>
+            </div>
         </div>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-</div>
 </body>
 </html>

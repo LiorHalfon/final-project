@@ -1,0 +1,70 @@
+body {
+    background: url("/images/article.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#logoff {
+    right: 0;
+    top: 0;
+}
+
+#back-home {
+    left: 0;
+    top: 0;
+}
+
+.standalone-button {
+    position: fixed;
+    padding: 15px;
+    margin: 5px;
+    background-color: rgba(10,10,10,0.7);
+    border-radius: 5px;
+    color: white;
+}
+
+.container {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+
+    display: flex;
+    align-items: start;
+}
+
+#articleContainer {
+    margin-top: 5px;
+    padding: 20px;
+    background-color: rgba(10,10,10,0.7);
+    border-radius: 5px;
+    color: white;
+}
+
+.sentiment {
+    border-radius: 50%;
+}
+
+.sentiment.positive {
+    background-color: #1dff1d;
+}
+
+.sentiment.negative {
+    background-color: #ff0000;
+}
+
+.sentiment.neutral {
+    background-color: #fcf8e3;
+}
+
+#thumbs-up span {
+    color: #1dff1d;
+}
+
+#thumbs-down span {
+    color: #ff0000;
+}
+
+#block-domain span {
+    color: #c11313;
+}
