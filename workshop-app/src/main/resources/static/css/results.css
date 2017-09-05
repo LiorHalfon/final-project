@@ -33,6 +33,6 @@ body {
     color: white;
 }
 
-button .glyphicon {
+.row-buttons button .glyphicon {
     margin-right: 5px;
 }

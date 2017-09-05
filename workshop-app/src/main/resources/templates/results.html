@@ -22,7 +22,13 @@
     $(document).ready(function () {
         $('#results').DataTable();
 
+        $(".trash-button").click(function (e) {
+            var resultsJSON  = $("#resultsJSON").val();
+            //TODO: DELETE FROM resultsJSON
+        });
+
         $("#sendMailForm").submit(function (e) {
+            //TODO: send resultsJSON to the server to store the new resultsJSON
             $.ajax({
                 type: "POST",
                 url: "/results/sendemail",
@@ -40,6 +46,8 @@
     });
 </script>
 <div class="container">
+    <input id="resultsJSON" type="hidden" name="resultsJSON" th:value="${results}">
+
     <a id="logoff" class="standalone-button" href="/logout">
         <span class="glyphicon glyphicon-log-out"></span>
     </a>
@@ -47,7 +55,7 @@
         <span class="glyphicon glyphicon-home"></span>
     </a>
     <br>
-    <div class="row" style="padding-bottom:2em;" th:if="${!results.isEmpty() && isAdmin}">
+    <div class="row row-buttons" style="padding-bottom:2em;" th:if="${!results.isEmpty() && isAdmin}">
         <form class="form-inline col-md-2 row" id="sendMailForm">
             <input type="hidden" name="resultsId" th:value="${results[0].id}">
             <input type="hidden" name="userEmail" th:value="${userEmail}">
@@ -65,6 +73,7 @@
             <table id="results" class="table table-bordered">
                 <thead>
                 <tr>
+                    <th></th>
                     <th>#</th>
                     <th>Title</th>
                     <th>Sentiment Polarity</th>
@@ -75,6 +84,11 @@
                 </thead>
                 <tbody>
                 <tr th:each="result,iterationstatus :${results}">
+                    <td th:if="${isAdmin}">
+                        <button th:id="'article_' + ${iterationstatus.count}" class="trash-button btn btn-md btn-danger">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </td>
                     <td th:text="${iterationstatus.count}">1</td>
                     <td th:text="${result.title}">Title</td>
                     <td th:text="${result.sentiment.polarity}">Sentiment Polarity</td>
