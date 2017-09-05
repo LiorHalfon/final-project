@@ -18,14 +18,38 @@
 </head>
 
 <body>
-<script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
     $(document).ready(function () {
         $('#results').DataTable();
 
         $(".trash-button").click(function (e) {
             var resultsJSON  = $("#resultsJSON").val();
-            //TODO: DELETE FROM resultsJSON
+            var results = JSON.parse(resultsJSON);
+            var indexToDelete = e.currentTarget.id.split('_')[1] - 1;
+            results.splice(indexToDelete,1);
+            $("#resultsJSON").val(JSON.stringify(results));
             $(this).parents('tr').remove();
+        });
+
+        $('#previewBtn').click(function (e) {
+            e.preventDefault();
+            var resId = [[${results[0].id}]];
+            var resJson = $("#resultsJSON").val();
+            var win=window.open('about:blank');
+            $.ajax({
+                type: "POST",
+                url: "/results/view/mail",
+                data: { resultsId: resId, resultsJson: resJson },
+                success: function (data) {
+                    with(win.document)
+                    {
+                        open();
+                        write(data);
+                        close();
+                    }
+                }
+            });
         });
 
         $("#sendMailForm").submit(function (e) {
@@ -45,9 +69,10 @@
             e.preventDefault();
         });
     });
+    /*]]>*/
 </script>
 <div class="container">
-    <input id="resultsJSON" type="hidden" name="resultsJSON" th:value="${results}">
+    <input id="resultsJSON" type="hidden" name="resultsJSON" th:value="${resultsJson}">
 
     <a id="logoff" class="standalone-button" href="/logout">
         <span class="glyphicon glyphicon-log-out"></span>
@@ -63,11 +88,10 @@
             <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-envelope"></span>Send Mail</button>
         </form>
 
-        <form class="col-md-2" th:action="@{/results/view/mail}" method="get">
-            <input type="hidden" name="resultsId" th:value="${results[0].id}">
-            <button type="button" class="btn btn-primary btn-md btn-block" type="Submit"><span class="glyphicon glyphicon-eye-open"></span>Mail Preview
-            </button>
-        </form>
+        <a id="previewBtn" type="button"
+                class="col-md-2 btn btn-primary btn-md">
+                <span class="glyphicon glyphicon-eye-open"></span>Mail Preview
+        </a>
     </div>
     <div class="row">
         <div class="table-responsive">

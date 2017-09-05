@@ -18,10 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
@@ -58,12 +55,12 @@ public class ResultsController {
         List<RelevantNewsView> resultView = getRelevantNewsViewsById(resultsId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean isAdmin = userService.isAdminByEmail(auth.getName());
+        String resultsJson = searchResultsService.getResultsByResultsId(resultsId).getResults();
 
-        String resultJson = new Gson().toJson(resultView);
         modelAndView.addObject("results", resultView);
         modelAndView.addObject("isAdmin", isAdmin);
         modelAndView.addObject("userEmail", userEmail);
-        modelAndView.addObject("resultsJson", resultJson);
+        modelAndView.addObject("resultsJson", resultsJson);
         modelAndView.setViewName("results");
         return modelAndView;
     }
@@ -92,10 +89,11 @@ public class ResultsController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/results/view/mail", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "/results/view/mail", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public String previewMail(@Valid @ModelAttribute("resultsId") int resultsId) throws IOException, TemplateException {
-        List<RelevantNewsView> searchResults = getRelevantNewsViewsById(resultsId);
+    public String previewMail(@Valid @ModelAttribute("resultsId") int resultsId,
+                              @Valid @ModelAttribute("resultsJson") String resultsJson) throws IOException, TemplateException {
+        List<RelevantNewsView> searchResults = getRelevantNewsViewsByJson(resultsJson);
         String mailHtml = mailComposer.ComposeMail(searchResults, EMAIL_SUBJECT, resultsId);
         return mailHtml;
     }
@@ -117,10 +115,13 @@ public class ResultsController {
 
     private List<RelevantNewsView> getRelevantNewsViewsById(@Valid @ModelAttribute("resultsId") int resultsId) {
         SearchResults searchResults = searchResultsService.getResultsByResultsId(resultsId);
+        return getRelevantNewsViewsByJson(searchResults.getResults());
+    }
 
+    private List<RelevantNewsView> getRelevantNewsViewsByJson(String resultsJson) {
         Type listType = new TypeToken<ArrayList<RelevantNewsView>>() {
         }.getType();
         Gson gson = new Gson();
-        return gson.fromJson(searchResults.getResults(), listType);
+        return gson.fromJson(resultsJson, listType);
     }
 }
