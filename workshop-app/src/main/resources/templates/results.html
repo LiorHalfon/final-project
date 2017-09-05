@@ -25,6 +25,7 @@
         $(".trash-button").click(function (e) {
             var resultsJSON  = $("#resultsJSON").val();
             //TODO: DELETE FROM resultsJSON
+            $(this).parents('tr').remove();
         });
 
         $("#sendMailForm").submit(function (e) {
