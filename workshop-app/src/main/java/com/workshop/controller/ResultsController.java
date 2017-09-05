@@ -101,12 +101,15 @@ public class ResultsController {
     @RequestMapping(value = "/results/sendemail", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> sendMail(@Valid @ModelAttribute("resultsId") int resultsId,
-                                      @Valid @ModelAttribute("userEmail") String userEmail) throws IOException, TemplateException {
-        List<RelevantNewsView> searchResults = getRelevantNewsViewsById(resultsId);
+                                      @Valid @ModelAttribute("userEmail") String userEmail,
+                                      @Valid @ModelAttribute("resultsJson") String resultsJson) throws IOException, TemplateException {
+        List<RelevantNewsView> searchResults = getRelevantNewsViewsByJson(resultsJson);
         String mailHtml = mailComposer.ComposeMail(searchResults, "MyBuzz", resultsId);
         try {
+            searchResultsService.saveResults(resultsId, resultsJson);
             mailSender.sendMail("mybuzzworkshop@gmail.com", userEmail, EMAIL_SUBJECT, mailHtml);
         } catch (MessagingException e) {
+            e.printStackTrace();
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

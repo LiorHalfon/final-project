@@ -9,6 +9,7 @@ import java.util.List;
 
 public class RelevantNewsView {
     private int id;
+    private int index;
     private String title;
     private String summary;
     private Sentiment sentiment;
@@ -22,8 +23,9 @@ public class RelevantNewsView {
     private static final String negativeFaceUrl = "https://cdn2.iconfinder.com/data/icons/emoticons-17/24/emoticons-02-32.png";
     private static final String neutralFaceUrl = "https://cdn2.iconfinder.com/data/icons/emoticons-17/24/emoticons-04-32.png";
 
-    public RelevantNewsView(RelevantNews news, int resultId) {
+    public RelevantNewsView(RelevantNews news, int resultId, int index) {
         this.id = resultId;
+        this.index = index;
         title = news.article.getTitle();
         String[] images = news.article.getImages();
         if(images.length < 1)
@@ -140,5 +142,13 @@ public class RelevantNewsView {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

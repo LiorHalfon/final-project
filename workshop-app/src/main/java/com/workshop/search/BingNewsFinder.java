@@ -45,6 +45,7 @@ public class BingNewsFinder implements NewsFinder {
         public void start() throws MalformedURLException{
         while (!_queries.isEmpty())
         {
+            System.out.println("Bing search started...");
             String query = _queries.remove(0);
             BingNewsResponse searchResults = _bingController.searchNews(query);
 
@@ -57,6 +58,8 @@ public class BingNewsFinder implements NewsFinder {
                 System.err.println("Got empty search results for query: " + query);
                 continue;
             }
+
+            System.out.println("Bing search done, classifying results...");
 
             BingWebResponseData<BingNewsResult> data = searchResults.getData();
             List<BingNewsResult> resultsList = data.getResults();
@@ -73,6 +76,7 @@ public class BingNewsFinder implements NewsFinder {
                     _textAnalyser.ConnectToServerWithNewCredentials();
                 }
             }
+            System.out.println("Classifying is done.");
         }
         isSearchFinished = true;
     }

@@ -27,7 +27,12 @@
             var resultsJSON  = $("#resultsJSON").val();
             var results = JSON.parse(resultsJSON);
             var indexToDelete = e.currentTarget.id.split('_')[1] - 1;
-            results.splice(indexToDelete,1);
+            for (var i = 0; i < results.length; i++) {
+                if(results[i].index == indexToDelete){
+                    results.splice(i,1);
+                    break;
+                }
+            }
             $("#resultsJSON").val(JSON.stringify(results));
             $(this).parents('tr').remove();
         });
@@ -54,10 +59,14 @@
 
         $("#sendMailForm").submit(function (e) {
             //TODO: send resultsJSON to the server to store the new resultsJSON
+            var data = {};
+            data['resultsId'] = [[${results[0].id}]];
+            data['userEmail'] = [[${userEmail}]];
+            data['resultsJson'] = $("#resultsJSON").val();
             $.ajax({
                 type: "POST",
                 url: "/results/sendemail",
-                data: $("#sendMailForm").serialize(),
+                data: data,
                 success: function (response) {
                     alert("Success, " + response);
                     window.location.href = '/home';
@@ -82,24 +91,26 @@
     </a>
     <br>
     <div class="row row-buttons" style="padding-bottom:2em;" th:if="${!results.isEmpty() && isAdmin}">
-        <form class="form-inline col-md-2 row" id="sendMailForm">
+        <form class="form-inline col-md-2" id="sendMailForm">
             <input type="hidden" name="resultsId" th:value="${results[0].id}">
             <input type="hidden" name="userEmail" th:value="${userEmail}">
-            <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-envelope"></span>Send Mail</button>
+            <button type="submit" class="btn btn-success btn-block">
+                <span class="glyphicon glyphicon-envelope"></span>Send Mail
+            </button>
         </form>
 
-        <a id="previewBtn" type="button"
-                class="col-md-2 btn btn-primary btn-md">
-                <span class="glyphicon glyphicon-eye-open"></span>Mail Preview
-        </a>
+        <div class="col-md-2">
+            <a id="previewBtn" type="button"
+               class="btn btn-primary btn-md btn-block">
+                <span class="glyphicon glyphicon-eye-open"></span> Mail Preview
+            </a>
+        </div>
     </div>
     <div class="row">
         <div class="table-responsive">
             <table id="results" class="table table-bordered">
                 <thead>
                 <tr>
-                    <th></th>
-                    <th>#</th>
                     <th>Title</th>
                     <th>Sentiment Polarity</th>
                     <th>Categories</th>
@@ -109,12 +120,6 @@
                 </thead>
                 <tbody>
                 <tr th:each="result,iterationstatus :${results}">
-                    <td th:if="${isAdmin}">
-                        <button th:id="'article_' + ${iterationstatus.count}" class="trash-button btn btn-md btn-danger">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </button>
-                    </td>
-                    <td th:text="${iterationstatus.count}">1</td>
                     <td th:text="${result.title}">Title</td>
                     <td th:text="${result.sentiment.polarity}">Sentiment Polarity</td>
                     <td>
@@ -128,8 +133,13 @@
                             <input type="hidden" name="resultsId" th:value="${result.id}">
                             <input type="hidden" name="index" th:value="${iterationstatus.count - 1}">
                             <input type="hidden" name="userEmail" th:value="${userEmail}">
-                            <button class="btn btn-md btn-danger" type="Submit">Read More</button>
+                            <button class="btn btn-md btn-warning" type="Submit">Read More</button>
                         </form>
+
+                        <button th:if="${isAdmin}" th:id="'article_' + ${iterationstatus.count}"
+                                class="trash-button btn btn-md btn-danger">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
                     </td>
                 </tr>
                 </tbody>

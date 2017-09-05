@@ -84,8 +84,8 @@ public class SearchThread extends Thread {
         }
 
         List<RelevantNewsView> resultView = new ArrayList<>();
-        for (RelevantNews news : results) {
-            resultView.add(new RelevantNewsView(news, resultsId));
+        for (int i = 0; i < results.size(); i++) {
+            resultView.add(new RelevantNewsView(results.get(i), resultsId, i));
         }
 
         Gson gson = new Gson();
