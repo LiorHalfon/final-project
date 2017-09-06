@@ -130,7 +130,7 @@
                     <td th:text="${result.domain}"> Domain</td>
                     <td>
                         <form th:action="@{/results/view/article}" method="get">
-                            <input type="hidden" name="resultsId" th:value="${result.id}">
+                            <input type="hidden" name="resultsId" th:value="${results[0].id}">
                             <input type="hidden" name="index" th:value="${iterationstatus.count - 1}">
                             <input type="hidden" name="userEmail" th:value="${userEmail}">
                             <button class="btn btn-md btn-warning" type="Submit">Read More</button>
